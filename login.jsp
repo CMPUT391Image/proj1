@@ -15,10 +15,7 @@
        //get the user input from the login page
        String userName = (request.getParameter("USERID")).trim();
        String passwd = (request.getParameter("PASSWD")).trim();
-     //  out.println("<p>Your input User Name is "+userName+"</p>");
-      // out.println("<p>Your input password is "+passwd+"</p>");
-     
-
+       
        //establish the connection to the underlying database
        Connection conn = null;
 				
@@ -37,7 +34,7 @@
    
        try{
            //establish the connection 
-           conn = DriverManager.getConnection(dbstring,"elbohtim","foster423");
+           conn = DriverManager.getConnection(dbstring,"Username","password");//CHANGE THIS TO YOUR OWN USERNAME AND PASSWORD 
            conn.setAutoCommit(false);
        }
        catch(Exception ex){
@@ -49,7 +46,7 @@
        //select the user table from the underlying db and validate the user name and password
        Statement stmt = null;
        ResultSet rset = null;
-       String sql = "select PWD from login where id = '"+userName+"'";//CHANGE THIS SQL STATEMENT
+       String sql = "select password from users where user_name = '"+userName+"'";
       // out.println(sql);
        try{
            stmt = conn.createStatement();
@@ -66,8 +63,9 @@
        truepwd = (rset.getString(1)).trim();
    
        //display the result
-       if(passwd.equals(truepwd)){
-           out.println("<p><b>Your Login is Successful!</b></p>");
+       if(passwd.equals(truepwd) && !userName.equals("")){
+           //out.println("<p><b>Your Login is Successful!</b></p>");
+           response.sendRedirect("menu.jsp");
        }
        else{
            out.println("<p><b>Either your userName or Your password is inValid!</b></p>");
