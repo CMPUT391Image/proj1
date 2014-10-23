@@ -1,4 +1,4 @@
-
+ 
 <HTML>
 <HEAD>
 
@@ -7,7 +7,7 @@
 </HEAD>
 <H1><CENTER>Online Image Sharer</CENTER></H1>
 <BODY>
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.*,Database.db" %>
 <% 
 
    if(request.getParameter("bSubmit") != null)
@@ -17,37 +17,17 @@
        String passwd = (request.getParameter("PASSWD")).trim();
        
        //establish the connection to the underlying database
-       Connection conn = null;
-				
-       String driverName = "oracle.jdbc.driver.OracleDriver";
-       String dbstring = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
-					
-       try{
-           //load and register the driver
-           Class drvClass = Class.forName(driverName); 
-           DriverManager.registerDriver((Driver) drvClass.newInstance());
-       }
-       catch(Exception ex){
-       out.println("<hr>" + ex.getMessage() + "<hr>");
-   
-       }
-   
-       try{
-           //establish the connection 
-           conn = DriverManager.getConnection(dbstring,"Username","password");//CHANGE THIS TO YOUR OWN USERNAME AND PASSWORD 
-           conn.setAutoCommit(false);
-       }
-       catch(Exception ex){
-   
-       out.println("<hr>" + ex.getMessage() + "<hr>");
-       }
-   
+      
+       db newDB= new db();
+       Connection conn=newDB.connect();
+   	 
+     
    
        //select the user table from the underlying db and validate the user name and password
        Statement stmt = null;
        ResultSet rset = null;
        String sql = "select password from users where user_name = '"+userName+"'";
-      // out.println(sql);
+     
        try{
            stmt = conn.createStatement();
            rset = stmt.executeQuery(sql);
@@ -64,11 +44,11 @@
    
        //display the result
        if(passwd.equals(truepwd) && !userName.equals("")){
-           //out.println("<p><b>Your Login is Successful!</b></p>");
+           
            response.sendRedirect("menu.jsp");
        }
        else{
-           out.println("<p><b>Either your userName or Your password is inValid!</b></p>");
+           out.println("<p><b>Either your user name or your password is invalid!</b></p>");
            out.println("<form method=post action=login.jsp>");
            out.println("UserName: <input type=text name=USERID maxlength=20><br>");
            out.println("Password: <input type=password name=PASSWD maxlength=20><br>");
