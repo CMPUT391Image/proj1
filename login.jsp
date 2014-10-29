@@ -44,14 +44,14 @@
    
        //display the result
        if(passwd.equals(truepwd) && !userName.equals("")){
-           
+           session.setAttribute("USERNAME",userName);
            response.sendRedirect("menu.jsp");
        }
        else{
            out.println("<p><b>Either your user name or your password is invalid!</b></p>");
            out.println("<form method=post action=login.jsp>");
-           out.println("UserName: <input type=text name=USERID maxlength=20><br>");
-           out.println("Password: <input type=password name=PASSWD maxlength=20><br>");
+           out.println("UserName: <input type=text name=USERID maxlength=24><br>");
+           out.println("Password: <input type=password name=PASSWD maxlength=24><br>");
            out.println("<input type=submit name=bSubmit value=Submit>");
            out.println("</form>");
        

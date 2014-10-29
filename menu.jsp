@@ -6,7 +6,10 @@
 <BODY>
 
 <%
-out.println("<p> Good Job</p>");
+
+out.println("<form method=post action=uploadImage.jsp>");
+out.println("<input type=submit name=upload value=upload>");
+out.println("</form>");
 %>
 
 </BODY>
