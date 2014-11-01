@@ -73,6 +73,11 @@
        out.println("</form>");
    }      
 %>
+<hr>
+Register
+<form method=post action=register.jsp>
+<input type=submit name=register value=register>
+</form>
 
 
 
