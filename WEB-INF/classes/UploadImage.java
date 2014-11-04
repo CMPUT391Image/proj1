@@ -23,11 +23,11 @@ public class UploadImage extends HttpServlet {
 	
 	int pic_id;
 	HttpSession session = request.getSession();
-	String userName=(String)session.getAttribute("USERNAME");
+	String userName="kevin";//(String)session.getAttribute("USERNAME");
         String subject=null; 	
-	
 	String place=null;
 	String description=null;
+        String privacy=null;
 	
 	try {
 	    //Parse the HTTP request to get the image stream
@@ -48,6 +48,9 @@ public class UploadImage extends HttpServlet {
 		    }
 		    if(item.getFieldName().equals("DESCRIPTION")){
 			description=item.getString();
+		    }
+                    if(item.getFieldName().equals("PRIVACY")){
+		       privacy=item.getString();
 		    }
 		}
 		else{
@@ -72,7 +75,8 @@ public class UploadImage extends HttpServlet {
 	    db newDB= new db();
 	    Connection conn=newDB.connect();
 	    Statement stmt = conn.createStatement();
-	        
+
+      
 	    /*
 	     *  First, to generate a unique pic_id using an SQL sequence
 	     */
@@ -80,9 +84,16 @@ public class UploadImage extends HttpServlet {
 	    rset1.next();
 	    pic_id = rset1.getInt(1);
 
+	    
+	    String sql="select group_id from groups where group_name='"+privacy+"'";
+            rset1= stmt.executeQuery(sql);
+            String privacy_int="";
+            while(rset1 != null && rset1.next())
+	    privacy_int=(rset1.getString(1)).trim();
+
 	    //Insert an empty blob into the table first. Note that you have to 
 	    //use the Oracle specific function empty_blob() to create an empty blob
-	    stmt.execute("INSERT INTO images VALUES("+pic_id+",'"+userName+"','1','"+subject+"','"+place+"',sysdate,'"+description+"',empty_blob(),empty_blob())");
+	    stmt.execute("INSERT INTO images VALUES("+pic_id+",'"+userName+"','"+privacy_int+"','"+subject+"','"+place+"',sysdate,'"+description+"',empty_blob(),empty_blob())");
  
 	    // to retrieve the lob_locator 
 	    // Note that you must use "FOR UPDATE" in the select statement
