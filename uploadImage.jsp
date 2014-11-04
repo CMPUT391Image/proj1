@@ -17,7 +17,7 @@
       session.removeAttribute("error");
    }
    
-   String userName="kevin";//(String)session.getAttribute("USERNAME");
+   String userName=(String)session.getAttribute("USERNAME");
    db newDB= new db();
    Connection conn=newDB.connect();
     

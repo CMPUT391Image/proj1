@@ -23,7 +23,7 @@ public class UploadImage extends HttpServlet {
 	
 	int pic_id;
 	HttpSession session = request.getSession();
-	String userName="kevin";//(String)session.getAttribute("USERNAME");
+	String userName=(String)session.getAttribute("USERNAME");
         String subject=null; 	
 	String place=null;
 	String description=null;
