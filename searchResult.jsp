@@ -5,6 +5,7 @@
 	String kWord = request.getParameter("searchKey");
 	String fromTime = request.getParameter("searchFromTime");
 	String toTime = request.getParameter("searchToTime");
+	String sortType = request.getParameter("sort");
 	//error checks to make sure required text fields have values
 	if (kWord == "" && fromTime == "" || toTime == "" && kWord == "") {
 		String error = "<p><b><font color=ff0000>You have not entered in all required search parameters!</font></b></p>";
@@ -50,6 +51,8 @@
 	String userID = (String) session.getAttribute("person_id");
 	out.println("<h1>search</h1>");
 	out.println(request.getParameter("searchKey"));
+		out.println(request.getAttribute("sort"));
+	out.println(sortType);
 	String[] keywords = kWord.split(" ");
 	Statement doSearch = m_con.createStatement();
 	String sql = "Select subject, ";
@@ -64,7 +67,7 @@
 		mod +=3;
 		}
 	}
-	sql += "as rank from images where ";
+	sql += "as rank from images where (";
 
 	mod = 0;
 	for (int j = 0; j < keywords.length; ++j) {
@@ -76,11 +79,25 @@
 		mod += 3;
 		}
 	}
+	sql+=")";
+	//if range of times given
+		if (!fromTime.isEmpty() && !toTime.isEmpty()) {
+			sql += "AND (timing between to_date('" + fromTime
+					+ "', 'DD/MM/YYYY') " + "AND to_date('" + toTime + "','DD/MM/YYYY')) ";
+	}
+	//else only begining of time
+		else if(!fromTime.isEmpty()){
+			sql += "AND (timing >= to_date('" + fromTime
+					+ "','DD/MM/YYYY')) ";
+		}
+		//else only end of time
+		else if(!toTime.isEmpty()){
+			sql += "AND (timing <= to_date('" + toTime
+					+ "','DD/MM/YYYY')) ";
+		}
+
 	sql+="ORDER BY RANK desc";
 	//print results
-	if (!fromTime.isEmpty()){
-		out.println("Hello from before time");
-	}
 	
 	ResultSet rset2 = doSearch.executeQuery(sql);
 	     out.println("<table border=1>");
