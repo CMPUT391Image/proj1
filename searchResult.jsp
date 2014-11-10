@@ -7,7 +7,7 @@
 	String toTime = request.getParameter("searchToTime");
 	String sortType = request.getParameter("sort");
 	//error checks to make sure required text fields have values
-	if (kWord == "" && fromTime == "" || toTime == "" && kWord == "") {
+	if (kWord == "" && fromTime == "" && toTime == "") {
 		String error = "<p><b><font color=ff0000>You have not entered in all required search parameters!</font></b></p>";
 		session.setAttribute("error", error);
 		response.sendRedirect("search.jsp");
@@ -51,39 +51,58 @@
 	String userID = (String) session.getAttribute("person_id");
 	out.println("<h1>search</h1>");
 	out.println(request.getParameter("searchKey"));
-		out.println(request.getAttribute("sort"));
-	out.println(sortType);
+	
 	String[] keywords = kWord.split(" ");
 	Statement doSearch = m_con.createStatement();
-	String sql = "Select subject, ";
-	int mod = 0;
-	for (int i = 1; i <= keywords.length; ++i)
-	{
-		sql += "6*score(" + Integer.toString(mod+1) + ") +" 
-		+ "6*score(" + Integer.toString(mod+2) + ") +"
-		+ "score(" + Integer.toString(mod+3) + ") ";
-		if (i != keywords.length){
-		sql += "+";
-		mod +=3;
-		}
-	}
-	sql += "as rank from images where (";
-
-	mod = 0;
-	for (int j = 0; j < keywords.length; ++j) {
-	sql += "contains(SUBJECT, '" + keywords[j] +"', "+ Integer.toString(mod + 1) + ") >0 OR " 
-	+ "contains(PLACE, '" + keywords[j] +"', "+ Integer.toString(mod + 2) + ") >0 OR "
-	+ "contains(DESCRIPTION, '" + keywords[j] +"', "+ Integer.toString(mod + 3) + ") >0 ";
-	if (j != keywords.length-1) {
-		sql += "OR ";
-		mod += 3;
-		}
-	}
-	sql+=")";
-	//if range of times given
+	String sql = "Select subject";
+	if (kWord.isEmpty()){
+		sql += " from images where";
+		//if range of times given
 		if (!fromTime.isEmpty() && !toTime.isEmpty()) {
-			sql += "AND (timing between to_date('" + fromTime
+			sql += " (timing between to_date('" + fromTime
 					+ "', 'DD/MM/YYYY') " + "AND to_date('" + toTime + "','DD/MM/YYYY')) ";
+		}
+		//else only begining of time
+			else if(!fromTime.isEmpty()){
+				sql += " (timing >= to_date('" + fromTime
+						+ "','DD/MM/YYYY')) ";
+			}
+			//else only end of time
+			else if(!toTime.isEmpty()){
+				sql += " (timing <= to_date('" + toTime
+						+ "','DD/MM/YYYY')) ";
+			}
+	}
+	if(!kWord.isEmpty()){
+		sql+=", ";
+		int mod = 0;
+		for (int i = 1; i <= keywords.length; ++i)
+		{
+			sql += "6*score(" + Integer.toString(mod+1) + ") +" 
+			+ "6*score(" + Integer.toString(mod+2) + ") +"
+			+ "score(" + Integer.toString(mod+3) + ") ";
+			if (i != keywords.length){
+			sql += "+";
+			mod +=3;
+			}
+		}
+		sql += "as rank from images where (";
+
+		mod = 0;
+		for (int j = 0; j < keywords.length; ++j) {
+		sql += "contains(SUBJECT, '" + keywords[j] +"', "+ Integer.toString(mod + 1) + ") >0 OR " 
+		+ "contains(PLACE, '" + keywords[j] +"', "+ Integer.toString(mod + 2) + ") >0 OR "
+		+ "contains(DESCRIPTION, '" + keywords[j] +"', "+ Integer.toString(mod + 3) + ") >0 ";
+		if (j != keywords.length-1) {
+			sql += "OR ";
+			mod += 3;
+			}
+		}
+		sql+=")";
+			//if range of times given
+	if (!fromTime.isEmpty() && !toTime.isEmpty()) {
+		sql += "AND (timing between to_date('" + fromTime
+				+ "', 'DD/MM/YYYY') " + "AND to_date('" + toTime + "','DD/MM/YYYY')) ";
 	}
 	//else only begining of time
 		else if(!fromTime.isEmpty()){
@@ -95,10 +114,23 @@
 			sql += "AND (timing <= to_date('" + toTime
 					+ "','DD/MM/YYYY')) ";
 		}
-
-	sql+="ORDER BY RANK desc";
+	}
+	if (sortType.equals("none")){
+		sql+="ORDER BY RANK desc";
+		//out.println("one");
+		
+	}
+	else if (sortType.equals("desc")){
+		sql+="ORDER BY timing desc";
+		//out.println("two");
+	}
+	else if	(sortType.equals("ascen")){
+		sql+="ORDER BY timing asc";
+		//out.println("three");
+	}
 	//print results
-	
+	//out.println(sortType);
+	//out.println(sql);
 	ResultSet rset2 = doSearch.executeQuery(sql);
 	     out.println("<table border=1>");
               out.println("<tr>");
