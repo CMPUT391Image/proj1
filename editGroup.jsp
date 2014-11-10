@@ -1,0 +1,109 @@
+<HTML>
+<HEAD>
+<TITLE>Edit Group</TITLE>
+</HEAD>
+<BODY>
+
+<H1>Edit Group</H1>
+<%@ page import="java.sql.*,Database.db,java.util.ArrayList" %>
+<%
+  String userName=(String)session.getAttribute("USERNAME");
+  db newDB= new db();
+  Connection conn=newDB.connect();
+    
+  ArrayList<String> myGroup=new ArrayList<String>();  
+   
+  Statement stmt = null;
+  ResultSet rset = null;
+   
+  String sql = "select group_name from groups where user_name='"+userName+"'";
+  try{
+     stmt = conn.createStatement();
+     rset = stmt.executeQuery(sql);
+  }
+   
+  catch(Exception ex){
+      out.println("<hr>" + ex.getMessage() + "<hr>");
+  }
+  String groupName = "";
+   
+  while(rset != null && rset.next()){
+      groupName = (rset.getString(1)).trim();
+      myGroup.add(groupName);
+  }
+
+  if (request.getParameter("dSubmit")!=null){
+      String action=request.getParameter("ACTION");
+      String member=request.getParameter("USERNAME");
+      String group=request.getParameter("MYGROUP");
+      String notice=request.getParameter("NOTICE");//SOMETHING WRONG
+
+      String sql1 = "select group_id from groups where group_name='"+group+"'";
+      rset = stmt.executeQuery(sql1);
+
+      String group_id="";
+      while(rset != null && rset.next())
+      group_id = (rset.getString(1)).trim();
+      if (action.equals("Add")){
+         try{
+             stmt.execute("INSERT INTO group_lists VALUES('"+group_id+"','"+member+"',sysdate,'w')");//FIGURE OUT NOTICE
+             response.sendRedirect("menu.jsp");
+         }
+         catch(Exception ex){
+             out.println("<p><b>Either member doesn't exist or is already in the group</b></p>");
+         }
+      }
+      else{
+         try{
+             String sql2 = "select friend_id from group_lists where group_id='"+group_id+"'and friend_id='"+member+"'";
+             rset = stmt.executeQuery(sql2);
+
+             String check="";
+             while(rset != null && rset.next())
+             check = (rset.getString(1)).trim();
+             if (check.equals("")){
+                 out.println("<p><b>Member is already not in the group</b></p>");
+             }
+             else{
+               stmt.execute("delete from group_lists where group_id='"+group_id+"'and friend_id='"+member+"'");//FIGURE OUT NOTICE
+               response.sendRedirect("menu.jsp");
+             }
+         }
+         catch(Exception ex){
+             out.println("<p><b>Member is already not in the group</b></p>");
+         }
+      } 
+   }
+  try{
+     conn.close();  
+  }
+  catch(Exception ex){
+     out.println("<hr>" + ex.getMessage() + "<hr>");
+  } 
+%>
+
+<form method=post action=editGroup.jsp>
+Group:<select name="MYGROUP">
+<% for (String item:myGroup){%>     
+   <option value="<%=item %>">
+      <%=item%>
+   </option>
+   <%}
+   %>
+</select><br>
+
+User Name:<input type="text" name="USERNAME" maxlength="24" size="24"><br>
+
+Action:<select name="ACTION">
+<option value="Add">Add</option>
+<option value="Remove">Remove</option>
+</select><br>
+
+
+Notice:<br><textarea type="text" name="NOTICE" maxlength="1024" rows="16" cols="32" ></textarea><br>
+(Please leave blank if removing a member)<br>
+<input type="submit" name="dSubmit" value="Edit">
+
+</form>
+</BODY> 
+</HTML>
