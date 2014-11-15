@@ -15,7 +15,7 @@
    
   Statement stmt = null;
   ResultSet rset = null;
-   
+  //Getting all the group names to add them into a drop down box   
   String sql = "select group_name from groups where user_name='"+userName+"'";
   try{
      stmt = conn.createStatement();
@@ -36,17 +36,20 @@
       String action=request.getParameter("ACTION");
       String member=request.getParameter("USERNAME");
       String group=request.getParameter("MYGROUP");
-      String notice=request.getParameter("NOTICE");//SOMETHING WRONG
+      String notice=null;
+      notice=request.getParameter("NOTICE");
 
+       //Getting the group id so that we can use that id for the group_lists table
       String sql1 = "select group_id from groups where group_name='"+group+"'";
       rset = stmt.executeQuery(sql1);
 
       String group_id="";
       while(rset != null && rset.next())
       group_id = (rset.getString(1)).trim();
+      //Add a user to a group and displaying proper error messages
       if (action.equals("Add")){
          try{
-             stmt.execute("INSERT INTO group_lists VALUES('"+group_id+"','"+member+"',sysdate,'w')");//FIGURE OUT NOTICE
+             stmt.execute("INSERT INTO group_lists VALUES('"+group_id+"','"+member+"',sysdate,'"+notice+"')");
              response.sendRedirect("menu.jsp");
          }
          catch(Exception ex){
@@ -54,6 +57,8 @@
          }
       }
       else{
+
+         //Removing user from a group and displaying the proper error messages
          try{
              String sql2 = "select friend_id from group_lists where group_id='"+group_id+"'and friend_id='"+member+"'";
              rset = stmt.executeQuery(sql2);
@@ -62,10 +67,10 @@
              while(rset != null && rset.next())
              check = (rset.getString(1)).trim();
              if (check.equals("")){
-                 out.println("<p><b>Member is already not in the group</b></p>");
+                 out.println("<p><b>Member is not in the group</b></p>");
              }
              else{
-               stmt.execute("delete from group_lists where group_id='"+group_id+"'and friend_id='"+member+"'");//FIGURE OUT NOTICE
+               stmt.execute("delete from group_lists where group_id='"+group_id+"'and friend_id='"+member+"'");
                response.sendRedirect("menu.jsp");
              }
          }
@@ -79,7 +84,7 @@
   }
   catch(Exception ex){
      out.println("<hr>" + ex.getMessage() + "<hr>");
-  } 
+  }
 %>
 
 <form method=post action=editGroup.jsp>

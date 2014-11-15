@@ -7,6 +7,7 @@
 <%@ page import="java.sql.*,Database.db" %>
 
 <%!
+ //A function that checks that the user filled in all the fields
  Boolean emptyField=false;
  private void emptyChecker(String string){
      if (string.equals("")){
@@ -18,6 +19,7 @@
 <%
     if (request.getParameter("aSubmit")!=null)
     {
+       //Making sure the user did not leave any blank fields
        String userName=(request.getParameter("username")).trim();
        emptyChecker(userName);
        String password=(request.getParameter("password")).trim();
@@ -37,6 +39,8 @@
           emptyField=false;
        }
        else{
+
+            //Connect to the database
             db newDB= new db();
             Connection conn=newDB.connect();
     
@@ -61,7 +65,7 @@
            while(rset != null && rset.next())
            trueuser = (rset.getString(1)).trim();
    
-           //display the result
+           //display the result to make sure that user name is already not in use by someone else
            if(userName.equals(trueuser)){
                 out.println("<b>Username has been already taken</b><br>");
            }
@@ -81,6 +85,8 @@
           }
        }
     }
+
+//Getting all the information from the user
 %>
 <form method=post action=register.jsp>
 UserName: <input type=text name=username maxlength=24><br>

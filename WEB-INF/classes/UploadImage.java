@@ -23,7 +23,7 @@ public class UploadImage extends HttpServlet {
 	
 	int pic_id;
 	HttpSession session = request.getSession();
-	String userName=(String)session.getAttribute("USERNAME");
+	String userName="tarek";//(String)session.getAttribute("USERNAME");
         String subject=null; 	
 	String place=null;
 	String description=null;
@@ -102,13 +102,14 @@ public class UploadImage extends HttpServlet {
 	    rset.next();
 	    BLOB thumb = ((OracleResultSet)rset).getBLOB(8);
 	    BLOB real = ((OracleResultSet)rset).getBLOB(9);
-
+            
+	    
 	    //Write the image to the blob object
 	    OutputStream thumbpic = thumb.getBinaryOutputStream();
-	    ImageIO.write(thumbNail, "jpg", thumbpic);
+	    ImageIO.write(thumbNail, "gif", thumbpic);
 	   
 	    OutputStream realpic = real.getBinaryOutputStream();
-	    ImageIO.write(img, "jpg", realpic);
+	    ImageIO.write(img, "gif", realpic);
 	    /*
 	          int size = myblob.getBufferSize();
 		      byte[] buffer = new byte[size];
@@ -116,6 +117,7 @@ public class UploadImage extends HttpServlet {
 			      while ((length = instream.read(buffer)) != -1)
 			      outstream.write(buffer, 0, length);
 	    */
+	    
 	    instream.close();
 	    thumbpic.close();
 	    realpic.close();
@@ -124,9 +126,9 @@ public class UploadImage extends HttpServlet {
 	    response_message = " Upload OK!  ";
             conn.close();
 
-	} catch( Exception ex ) {
+        } catch( Exception ex ) {
 	    //System.out.println( ex.getMessage());
-	    response_message = ex.getMessage();
+	    response_message = "Error in uploading photo please try again "+ex.getMessage();
 	}
  
 	//Output response to the client
@@ -140,7 +142,7 @@ public class UploadImage extends HttpServlet {
 		        "<H1>" +
 		                response_message+
 		        "</H1>\n" +
-		    "</BODY></HTML>");
+		    "<form method= post action=menu.jsp><input type=submit name=eSubmit value=Menu></form></BODY></HTML>");
     }
 
     
