@@ -70,6 +70,7 @@
                  out.println("<p><b>Member is not in the group</b></p>");
              }
              else{
+               stmt.execute("update images set permitted='2' where permitted='"+group_id+"'");   
                stmt.execute("delete from group_lists where group_id='"+group_id+"'and friend_id='"+member+"'");
                response.sendRedirect("menu.jsp");
              }

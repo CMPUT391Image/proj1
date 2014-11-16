@@ -17,7 +17,7 @@ public class UploadImage extends HttpServlet {
     
 
     FileItem imageFile=null;
-
+    String privacy_int="";
     public void doPost(HttpServletRequest request,HttpServletResponse response)
 	throws ServletException, IOException {
 	
@@ -83,14 +83,28 @@ public class UploadImage extends HttpServlet {
 	    ResultSet rset1 = stmt.executeQuery("SELECT pic_id_sequence.nextval from dual");
 	    rset1.next();
 	    pic_id = rset1.getInt(1);
-
+            
+            //String privacy_int="";
+            if(privacy.equals("public")){
+	        privacy_int="1";	
+	    }
+	    else if(privacy.equals("private")){
+	        privacy_int="2";
+	    }
+ 
+            else{
+		String[] parts=privacy.split(",");
+		String name=parts[0];
+		String creator=parts[1];
 	    
-	    String sql="select group_id from groups where group_name='"+privacy+"'";
-            rset1= stmt.executeQuery(sql);
-            String privacy_int="";
-            while(rset1 != null && rset1.next())
-	    privacy_int=(rset1.getString(1)).trim();
-
+		String sql="select group_id from groups where group_name='"+name+"' and user_name='"+creator+"'";
+		rset1= stmt.executeQuery(sql);
+	       
+		while(rset1 != null && rset1.next())
+		privacy_int=(rset1.getString(1)).trim();
+	    }
+	    
+	    
 	    //Insert an empty blob into the table first. Note that you have to 
 	    //use the Oracle specific function empty_blob() to create an empty blob
 	    stmt.execute("INSERT INTO images VALUES("+pic_id+",'"+userName+"','"+privacy_int+"','"+subject+"','"+place+"',sysdate,'"+description+"',empty_blob(),empty_blob())");
@@ -157,7 +171,7 @@ public class UploadImage extends HttpServlet {
 		        "<HEAD><TITLE>Upload Message</TITLE></HEAD>\n" +
 		        "<BODY>\n" +
 		        "<H1>" +
-		                response_message+
+		                response_message+privacy_int+
 		        "</H1>\n" +
 		    "<form method= post action=menu.jsp><input type=submit name=eSubmit value=Menu></form></BODY></HTML>");
     }
