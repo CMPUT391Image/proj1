@@ -23,7 +23,7 @@ public class UploadImage extends HttpServlet {
 	
 	int pic_id;
 	HttpSession session = request.getSession();
-	String userName="tarek";//(String)session.getAttribute("USERNAME");
+	String userName=(String)session.getAttribute("USERNAME");
         String subject=null; 	
 	String place=null;
 	String description=null;
@@ -171,7 +171,7 @@ public class UploadImage extends HttpServlet {
 		        "<HEAD><TITLE>Upload Message</TITLE></HEAD>\n" +
 		        "<BODY>\n" +
 		        "<H1>" +
-		                response_message+privacy_int+
+		                response_message+
 		        "</H1>\n" +
 		    "<form method= post action=menu.jsp><input type=submit name=eSubmit value=Menu></form></BODY></HTML>");
     }
