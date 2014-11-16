@@ -55,6 +55,7 @@
 	String[] keywords = kWord.split(" ");
 	Statement doSearch = m_con.createStatement();
 	String sql = "Select subject";
+	//if there is no keyword, use dates
 	if (kWord.isEmpty()){
 		sql += " from images where";
 		//if range of times given
@@ -73,6 +74,7 @@
 						+ "','DD/MM/YYYY')) ";
 			}
 	}
+	//if there are keywords, take score of keywords
 	if(!kWord.isEmpty()){
 		sql+=", ";
 		int mod = 0;
