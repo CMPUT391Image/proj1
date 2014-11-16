@@ -17,7 +17,7 @@ public class UploadImage extends HttpServlet {
     
 
     FileItem imageFile=null;
-
+    String privacy_int="";
     public void doPost(HttpServletRequest request,HttpServletResponse response)
 	throws ServletException, IOException {
 	
@@ -83,14 +83,28 @@ public class UploadImage extends HttpServlet {
 	    ResultSet rset1 = stmt.executeQuery("SELECT pic_id_sequence.nextval from dual");
 	    rset1.next();
 	    pic_id = rset1.getInt(1);
-
+            
+            //String privacy_int="";
+            if(privacy.equals("public")){
+	        privacy_int="1";	
+	    }
+	    else if(privacy.equals("private")){
+	        privacy_int="2";
+	    }
+ 
+            else{
+		String[] parts=privacy.split(",");
+		String name=parts[0];
+		String creator=parts[1];
 	    
-	    String sql="select group_id from groups where group_name='"+privacy+"'";
-            rset1= stmt.executeQuery(sql);
-            String privacy_int="";
-            while(rset1 != null && rset1.next())
-	    privacy_int=(rset1.getString(1)).trim();
-
+		String sql="select group_id from groups where group_name='"+name+"' and user_name='"+creator+"'";
+		rset1= stmt.executeQuery(sql);
+	       
+		while(rset1 != null && rset1.next())
+		privacy_int=(rset1.getString(1)).trim();
+	    }
+	    
+	    
 	    //Insert an empty blob into the table first. Note that you have to 
 	    //use the Oracle specific function empty_blob() to create an empty blob
 	    stmt.execute("INSERT INTO images VALUES("+pic_id+",'"+userName+"','"+privacy_int+"','"+subject+"','"+place+"',sysdate,'"+description+"',empty_blob(),empty_blob())");
@@ -102,20 +116,39 @@ public class UploadImage extends HttpServlet {
 	    rset.next();
 	    BLOB thumb = ((OracleResultSet)rset).getBLOB(8);
 	    BLOB real = ((OracleResultSet)rset).getBLOB(9);
-
+            
+	    OutputStream thumbpic=null;
+            OutputStream realpic=null;
 	    //Write the image to the blob object
-	    OutputStream thumbpic = thumb.getBinaryOutputStream();
-	    ImageIO.write(thumbNail, "jpg", thumbpic);
+	    try{ 
+               thumbpic = thumb.getBinaryOutputStream();
+	       ImageIO.write(thumbNail, "jpg", thumbpic);
 	   
-	    OutputStream realpic = real.getBinaryOutputStream();
-	    ImageIO.write(img, "jpg", realpic);
-	    /*
+	       realpic = real.getBinaryOutputStream();
+	       ImageIO.write(img, "jpg", realpic);
+	    }catch(Exception e){
+		try{ 
+		    thumbpic = thumb.getBinaryOutputStream();
+		    ImageIO.write(thumbNail, "gif", thumbpic);
+		
+		    realpic = real.getBinaryOutputStream();
+		    ImageIO.write(img, "gif", realpic);
+		}catch(Exception f){
+		    response_message = "Gif or jpg files only please";
+		}
+	    }
+	    
+
+		/* 
+	        OutputStream realpic = real.getBinaryOutputStream();
+	        ImageIO.write(img, "gif"
 	          int size = myblob.getBufferSize();
 		      byte[] buffer = new byte[size];
 		          int length = -1;
 			      while ((length = instream.read(buffer)) != -1)
 			      outstream.write(buffer, 0, length);
 	    */
+	    
 	    instream.close();
 	    thumbpic.close();
 	    realpic.close();
@@ -124,9 +157,9 @@ public class UploadImage extends HttpServlet {
 	    response_message = " Upload OK!  ";
             conn.close();
 
-	} catch( Exception ex ) {
+        } catch( Exception ex ) {
 	    //System.out.println( ex.getMessage());
-	    response_message = ex.getMessage();
+	    response_message = "Error in uploading photo please try again ";
 	}
  
 	//Output response to the client
@@ -140,7 +173,7 @@ public class UploadImage extends HttpServlet {
 		        "<H1>" +
 		                response_message+
 		        "</H1>\n" +
-		    "</BODY></HTML>");
+		    "<form method= post action=menu.jsp><input type=submit name=eSubmit value=Menu></form></BODY></HTML>");
     }
 
     

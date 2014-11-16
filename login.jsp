@@ -71,7 +71,9 @@
        out.println("Password: <input type=password name=PASSWD maxlength=20><br>");
        out.println("<input type=submit name=bSubmit value=Submit>");
        out.println("</form>");
-   }      
+   }    
+
+   //Button to go to registration  
 %>
 <hr>
 Register
