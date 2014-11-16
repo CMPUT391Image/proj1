@@ -44,6 +44,7 @@
       groupName = (rset.getString(1)).trim();
       privacy.add(groupName);
    }
+   
 
    try{
        conn.close();  

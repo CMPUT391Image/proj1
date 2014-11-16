@@ -40,7 +40,7 @@
       notice=request.getParameter("NOTICE");
 
        //Getting the group id so that we can use that id for the group_lists table
-      String sql1 = "select group_id from groups where group_name='"+group+"'";
+      String sql1 = "select group_id from groups where group_name='"+group+"' and user_name='"+userName+"'";
       rset = stmt.executeQuery(sql1);
 
       String group_id="";

@@ -40,7 +40,8 @@
      String group_id=""; 
      while(rset1 != null && rset1.next())
      group_id = (rset1.getString(1)).trim();
-     
+
+     stmt.execute("update images set group_id='2' where group_id='"+group_id+"'");      
      stmt.execute("delete from group_lists where group_id='"+group_id+"'");
      stmt.execute("delete from groups where group_id='"+group_id+"'");
      response.sendRedirect("menu.jsp");

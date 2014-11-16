@@ -103,14 +103,31 @@ public class UploadImage extends HttpServlet {
 	    BLOB thumb = ((OracleResultSet)rset).getBLOB(8);
 	    BLOB real = ((OracleResultSet)rset).getBLOB(9);
             
-	    
+	    OutputStream thumbpic=null;
+            OutputStream realpic=null;
 	    //Write the image to the blob object
-	    OutputStream thumbpic = thumb.getBinaryOutputStream();
-	    ImageIO.write(thumbNail, "gif", thumbpic);
+	    try{ 
+               thumbpic = thumb.getBinaryOutputStream();
+	       ImageIO.write(thumbNail, "jpg", thumbpic);
 	   
-	    OutputStream realpic = real.getBinaryOutputStream();
-	    ImageIO.write(img, "gif", realpic);
-	    /*
+	       realpic = real.getBinaryOutputStream();
+	       ImageIO.write(img, "jpg", realpic);
+	    }catch(Exception e){
+		try{ 
+		    thumbpic = thumb.getBinaryOutputStream();
+		    ImageIO.write(thumbNail, "gif", thumbpic);
+		
+		    realpic = real.getBinaryOutputStream();
+		    ImageIO.write(img, "gif", realpic);
+		}catch(Exception f){
+		    response_message = "Gif or jpg files only please";
+		}
+	    }
+	    
+
+		/* 
+	        OutputStream realpic = real.getBinaryOutputStream();
+	        ImageIO.write(img, "gif"
 	          int size = myblob.getBufferSize();
 		      byte[] buffer = new byte[size];
 		          int length = -1;
@@ -128,7 +145,7 @@ public class UploadImage extends HttpServlet {
 
         } catch( Exception ex ) {
 	    //System.out.println( ex.getMessage());
-	    response_message = "Error in uploading photo please try again "+ex.getMessage();
+	    response_message = "Error in uploading photo please try again ";
 	}
  
 	//Output response to the client

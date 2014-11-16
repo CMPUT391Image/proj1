@@ -33,6 +33,7 @@
                rset.next();
                group_id = rset.getInt(1);
                stmt.execute("INSERT INTO groups VALUES('"+group_id+"','"+userName+"','"+groupName+"',sysdate)");
+              
                response.sendRedirect("menu.jsp");
            } catch(Exception ex){
                out.println("<p>You cannot give the same name to two different groups</p>");
