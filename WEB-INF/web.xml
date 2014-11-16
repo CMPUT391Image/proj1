@@ -33,4 +33,13 @@
         <url-pattern>/GetOnePic</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>GetBigPic</servlet-name>
+        <servlet-class>GetBigPic</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetBigPic</servlet-name>
+        <url-pattern>/GetBigPic</url-pattern>
+    </servlet-mapping>
+
 </web-app>

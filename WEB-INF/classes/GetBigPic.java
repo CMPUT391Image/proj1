@@ -12,12 +12,13 @@ import java.sql.*;
  *
  *  The request must come with a query string as follows:
  *    GetOnePic?12:        sends the picture in sm_image with photo_id = 12
- *    GetOnePic?big12: sends the picture in image  with photo_id = 12
+ *    GetOnePicture?big12: sends the picture in image  with photo_id = 12
  *
- *  Modified from CMPUT391 sample code
+ *  @author  Li-Yan Yuan
  *
  */
-public class GetOnePic extends HttpServlet {
+public class GetBigPic extends HttpServlet 
+    implements SingleThreadModel {
 
     /**
      *    This method first gets the query string indicating PHOTO_ID,
@@ -26,7 +27,7 @@ public class GetOnePic extends HttpServlet {
      *    Finally, it sends the picture to the client
      */
 
- public void doGet(HttpServletRequest request,
+    public void doGet(HttpServletRequest request,
 		      HttpServletResponse response)
 	throws ServletException, IOException {
 	
@@ -34,13 +35,11 @@ public class GetOnePic extends HttpServlet {
 	String picid  = request.getQueryString();
 	String query;
 
-	if ( picid.startsWith("big") )  
-	    query = 
-	     "select photo from images where photo_id=" + picid.substring(3);
-	else
-	    query = "select thumbnail from images where photo_id=" + picid;
+	query = "select subject, place from images where photo_id="
+	        + picid.substring(3);
 
-	ServletOutputStream out = response.getOutputStream();
+	//ServletOutputStream out = response.getOutputStream();
+	PrintWriter out = response.getWriter();
 
 	/*
 	 *   to execute the given query
@@ -50,17 +49,20 @@ public class GetOnePic extends HttpServlet {
 	    conn = getConnected();
 	    Statement stmt = conn.createStatement();
 	    ResultSet rset = stmt.executeQuery(query);
+	    response.setContentType("text/html");
+            String subject, place;
+
 	    if ( rset.next() ) {
-			response.setContentType("image/jpg");
-			InputStream input = rset.getBinaryStream(1);	    
-			int imageByte;
-			while((imageByte = input.read()) != -1) {
-				out.write(imageByte);
-			}
-			input.close();
-	    } 
-	    else 
-			out.println("no picture available");
+	        subject = rset.getString("subject");
+	        place = rset.getString("place");
+                out.println("<html><head><title>"+subject+ "</title>+</head>" +
+	                 "<body bgcolor=\"#000000\" text=\"#cccccc\">" +
+		 "<center><img src = \"/proj1/GetOnePic?"+picid+"\">" +
+			 "<h3>" + subject +"  at " + place + " </h3>" +
+			 "</body></html>");
+            }
+	    else
+	      out.println("<html> Pictures are not avialable</html>");
 	} catch( Exception ex ) {
 	    out.println(ex.getMessage() );
 	}
@@ -73,6 +75,7 @@ public class GetOnePic extends HttpServlet {
 	    }
 	}
     }
+
 	    /*
      *   Connect to the specified database
      */
