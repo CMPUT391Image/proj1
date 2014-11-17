@@ -26,7 +26,7 @@ public class GetOnePic extends HttpServlet {
      *    Finally, it sends the picture to the client
      */
 
- public void doGet(HttpServletRequest request,
+    public void doGet(HttpServletRequest request,
 		      HttpServletResponse response)
 	throws ServletException, IOException {
 	
@@ -34,11 +34,11 @@ public class GetOnePic extends HttpServlet {
 	String picid  = request.getQueryString();
 	String query;
 
-	if ( picid.startsWith("big") )  
-	    query = 
-	     "select photo from images where photo_id=" + picid.substring(3);
+	if ( picid.startsWith("thumb") )  
+	        query = 
+		    "select thumbnail from images where photo_id=" + picid.substring(5);
 	else
-	    query = "select thumbnail from images where photo_id=" + picid;
+	    query = "select photo from images where photo_id=" + picid;
 
 	ServletOutputStream out = response.getOutputStream();
 
@@ -51,16 +51,16 @@ public class GetOnePic extends HttpServlet {
 	    Statement stmt = conn.createStatement();
 	    ResultSet rset = stmt.executeQuery(query);
 	    if ( rset.next() ) {
-			response.setContentType("image/jpg");
-			InputStream input = rset.getBinaryStream(1);	    
-			int imageByte;
-			while((imageByte = input.read()) != -1) {
-				out.write(imageByte);
-			}
-			input.close();
+		response.setContentType("image/jpg");
+		InputStream input = rset.getBinaryStream(1);    
+		int imageByte;
+		while((imageByte = input.read()) != -1) {
+		    out.write(imageByte);
+		}
+		input.close();
 	    } 
 	    else 
-			out.println("no picture available");
+		out.println("no picture available");
 	} catch( Exception ex ) {
 	    out.println(ex.getMessage() );
 	}
@@ -73,7 +73,7 @@ public class GetOnePic extends HttpServlet {
 	    }
 	}
     }
-	    /*
+    /*
      *   Connect to the specified database
      */
     private Connection getConnected() throws Exception {
@@ -82,7 +82,7 @@ public class GetOnePic extends HttpServlet {
 	String password = "foster423";
         /* one may replace the following for the specified database */
 	String dbstring = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
-    String driverName = "oracle.jdbc.driver.OracleDriver";
+	String driverName = "oracle.jdbc.driver.OracleDriver";
 	/*
 	 *  to connect to the database
 	 */
