@@ -4,7 +4,9 @@
 </HEAD>
 <H1><CENTER>Main Menu</CENTER></H1>
 <BODY>
-
+<div style="float: right">
+  <a href="logout.jsp">Logout</a>
+</div>
 <%
 
 out.println("<form method=post action=editGroup.jsp>");
@@ -18,6 +20,9 @@ out.println("<p>Delete a group:</p><input type=submit name=delete value=delete>"
 out.println("</form>");
 out.println("<form method=post action=uploadImage.jsp>");
 out.println("<p>Upload an image:</p><input type=submit name=upload value=upload>");
+out.println("</form>");
+out.println("<form method=post action=pictureBrowse.jsp>");
+out.println("<p>Browse pictures:</p><input type=submit name=browse value=browse>");
 out.println("</form>");
 %>
 

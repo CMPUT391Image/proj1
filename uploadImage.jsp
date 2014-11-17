@@ -3,6 +3,9 @@
 <TITLE>Image Upload</TITLE>
 </HEAD>
 <BODY>
+<div style="float: right">
+   <a href="logout.jsp">Logout</a>
+</div>
 
 <H1>Upload Image</H1>
 <%@ page import="java.sql.*,Database.db,java.util.ArrayList" %>

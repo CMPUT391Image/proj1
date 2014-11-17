@@ -67,7 +67,7 @@ public class UploadImage extends HttpServlet {
 	    InputStream instream = imageFile.getInputStream();
 
 	    BufferedImage img = ImageIO.read(instream);
-	    BufferedImage thumbNail = shrink(img, 10);
+	    BufferedImage thumbNail = shrink(img, 7);
 	    
             
 

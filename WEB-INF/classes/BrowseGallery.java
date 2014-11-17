@@ -24,19 +24,19 @@ public class BrowseGallery extends HttpServlet implements SingleThreadModel{
 		String query = "Select photo_id from images";
 		
 		Connection conn = getConnected();
-	    Statement stmt = conn.createStatement();
-	    ResultSet rset = stmt.executeQuery(query);
-	    String p_id = "";
-	    while (rset.next() ) {
-		p_id = (rset.getObject(1)).toString();
+		Statement stmt = conn.createStatement();
+		ResultSet rset = stmt.executeQuery(query);
+		String p_id = "";
+		while (rset.next() ) {
+		    p_id = (rset.getObject(1)).toString();
 
-	       // specify the servlet for the image
-               out.println("<a href=\"/proj1/GetOnePic?"+p_id+"\">");
-	       // specify the servlet for the themernail
-	       out.println("<img src=\"/proj1/GetOnePic?thumb"+p_id +"\"></a>");
-	    }
-	    stmt.close();
-	    conn.close();
+		    // specify the servlet for the image
+		    out.println("<a href=\"/proj1/GetOnePic?"+p_id+"\">");
+		    // specify the servlet for the themernail
+		    out.println("<img src=\"/proj1/GetOnePic?thumb"+p_id +"\"></a>");
+		}
+		stmt.close();
+		conn.close();
 	} catch ( Exception ex ){ out.println( ex.toString() );}
 
 	out.println("</body>");

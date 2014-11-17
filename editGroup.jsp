@@ -3,6 +3,9 @@
 <TITLE>Edit Group</TITLE>
 </HEAD>
 <BODY>
+<div style="float: right">
+   <a href="logout.jsp">Logout</a>
+</div>
 
 <H1>Edit Group</H1>
 <%@ page import="java.sql.*,Database.db,java.util.ArrayList" %>

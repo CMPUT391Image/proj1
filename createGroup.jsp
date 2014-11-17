@@ -4,6 +4,9 @@
 </HEAD>
 <H1><CENTER>Create Group</CENTER></H1>
 <BODY>
+<div style="float: right">
+   <a href="logout.jsp">Logout</a>
+</div>
 <%@ page import="java.sql.*,Database.db" %>
 <%
     if (request.getParameter("cSubmit")!=null)
