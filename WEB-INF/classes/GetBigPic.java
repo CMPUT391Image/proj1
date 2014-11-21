@@ -55,6 +55,7 @@ public class GetBigPic extends HttpServlet
 	    response.setContentType("text/html");
         String subject, place,timing, description;
 		String owner_name = null;
+		//print out picture and information
 	    if ( rset.next() ) {
 	        subject = rset.getString("subject");
 	        place = rset.getString("place");
@@ -70,6 +71,7 @@ public class GetBigPic extends HttpServlet
 	    else
 	      out.println("<html> Pictures are not avialable</html>");
 		  
+		  //if user is owner, show them the update form
 		if (userName == owner_name){
 			out.println("HELLO </BODY></HTML>");	
 		}
@@ -83,20 +85,30 @@ public class GetBigPic extends HttpServlet
 			String nameCreator="";
 			String groupName = "";
 			String groupCreator="";
+			//getting permissions
 			while(rset2 != null && rset.next()){
 				groupName = (rset.getString(1)).trim();
 				groupCreator=(rset.getString(2)).trim();
 				nameCreator=groupName+","+groupCreator;
 				privacy.add(nameCreator);
 				}
-		out.println("</center>" +"<h4> Edit Image: </h4>"
-			+ "<form action='editImage' method='post'>"
-			+ "Subject: " + "<input type='text' name='SUBJECT' maxlength='128' size='30'> <br>" 
-			+ "Place: "+"<input type='text' name='PLACE' maxlength='128' size='30'><br>"
-			+ "Description: "+"<textarea type='text' name='DESCRIPTION' maxlength='2048' rows='10' cols='25'></textarea> <br>"
-			
-			+ "<input type='submit' name='editButton' value='Update' />"
-			+ "</form>");
+				//printing form
+				out.println("</center>"
+						+ "<h4> Edit Image: </h4>"
+						+ "<form action='editImage' method='post'>"
+						+ "Subject: "
+						+ "<input type='text' name='SUBJECT' maxlength='128' size='30'> <br>"
+						+ "Place: "
+						+ "<input type='text' name='PLACE' maxlength='128' size='30'><br>"
+						+ "Description: <Br> "
+						+ "<textarea type='text' name='DESCRIPTION' maxlength='2048' rows='10' cols='25'></textarea> <br>"
+						+ "<th>Privacy (Group Name, Creator):</th>"
+						+ " <td><select name='PRIVACY'>"
+						+ "<% for (String item:privacy){%>  "
+						+ "<option value='<%=item %>'>" + " <%=item%>"
+						+ " </option>" + " <%}" + " %>" +"</td>" + "</select>"
+						+ "<input type='submit' name='editButton' value='Update' />"
+						+ "</form>");
 		out.println("GOODBYE</body></html>"); }
 	} catch( Exception ex ) {
 	    out.println(ex.getMessage() );
