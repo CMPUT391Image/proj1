@@ -35,8 +35,8 @@ public class GetBigPic extends HttpServlet
 	String picid  = request.getQueryString();
 	String query;
 
-	query = "select subject, place from images where photo_id="
-	        + picid.substring(9);
+	query = "select owner_name, timing, description, subject, place from images where photo_id="
+	        + picid;
 
 	//ServletOutputStream out = response.getOutputStream();
 	PrintWriter out = response.getWriter();
@@ -50,15 +50,19 @@ public class GetBigPic extends HttpServlet
 	    Statement stmt = conn.createStatement();
 	    ResultSet rset = stmt.executeQuery(query);
 	    response.setContentType("text/html");
-            String subject, place;
+            String subject, place, owner_name, timing, description;
 
 	    if ( rset.next() ) {
 	        subject = rset.getString("subject");
 	        place = rset.getString("place");
+			owner_name = rset.getString("owner_name");
+			timing = rset.getString("timing");
+			description = rset.getString("description");
                 out.println("<html><head><title>"+subject+ "</title>+</head>" +
 	                 "<body bgcolor=\"#000000\" text=\"#cccccc\">" +
 		 "<center><img src = \"/proj1/GetOnePic?"+picid+"\">" +
-			 "<h3>" + subject +"  at " + place + " </h3>" +
+			 "<h3>" + subject +"  at " + place + " </h3>" + "<br> taken by: " + owner_name + " on "+timing +
+			 "<br> <br>" + description +
 			 "</body></html>");
             }
 	    else
