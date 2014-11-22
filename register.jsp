@@ -46,7 +46,7 @@
     
      
    
-            //select the user table from the underlying db and validate the user name and password
+            //select the user table from the underlying db and validate the user name has not been taken
             Statement stmt = null;
             ResultSet rset = null;
             String sql = "select user_name from users where user_name = '"+userName+"'";
@@ -69,6 +69,7 @@
            if(userName.equals(trueuser)){
                 out.println("<b>Username has been already taken</b><br>");
            }
+           //Adds the new user into the users and persons table
            else{
                stmt.execute("INSERT INTO users VALUES('"+userName+"','"+password+"',sysdate)");
                stmt.execute("INSERT INTO persons VALUES('"+userName+"','"+fname+"','"+lname+"','"+address+"','"+email+"','"+phone+"')");

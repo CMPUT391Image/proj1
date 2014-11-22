@@ -11,7 +11,7 @@ public class BrowseGallery extends HttpServlet implements SingleThreadModel{
 	//  send out the HTML file
 	res.setContentType("text/html");
 	PrintWriter out = res.getWriter ();
-
+        
 	out.println("<html>");
 	out.println("<head>");
 	out.println("<title> Photo List </title>");
@@ -20,10 +20,29 @@ public class BrowseGallery extends HttpServlet implements SingleThreadModel{
 	out.println("<center>");
 	out.println("<h3>The List of Images </h3>");
 	
+        HttpSession session = request.getSession();
 	try{
-		String query = "Select photo_id from images";
+	 
+	    /*
+	     *Retrives a group id from pictureBrowse.jsp and from that the conditional statements get the appropriate pictures 
+	     *for the user to see depending on the permissions they chose
+	     */
+                String query="";
+                String userName=(String)session.getAttribute("USERNAME");
+                String group_id=(String)session.getAttribute("PERMITTED");
+                if(userName.equals("admin")){
+              	     query = "Select photo_id from images";
+                }
+                else if (group_id.equals("2")){
+		     query = "Select photo_id from images where permitted='2' and owner_name='"+userName+"'";
+		}
+		else{
+		     query = "Select photo_id from images where permitted='"+group_id+"'";
+		}
+		session.removeAttribute("PERMITTED");
 		
-		Connection conn = getConnected();
+
+                Connection conn = getConnected();
 		Statement stmt = conn.createStatement();
 		ResultSet rset = stmt.executeQuery(query);
 		String p_id = "";

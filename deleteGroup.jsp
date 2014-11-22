@@ -9,11 +9,15 @@
 <H1>Remove Group</H1>
 <%@ page import="java.sql.*,Database.db,java.util.ArrayList" %>
 <%
-  //WHAT HAPPENS TO IMAGES WHEN A GROUP IS DELETED?????
+  
   String userName=(String)session.getAttribute("USERNAME");
   db newDB= new db();
   Connection conn=newDB.connect();
-    
+  /*
+   *Retrieves all the groups that the user owns and 
+   * puts it in a drop down box for easier access
+   * so that the user can remove the group
+   */  
   ArrayList<String> myGroup=new ArrayList<String>();  
    
   Statement stmt = null;
@@ -34,6 +38,12 @@
       groupName = (rset.getString(1)).trim();
       myGroup.add(groupName);
   }
+
+  /*
+  *Takes the group the user wishes to delete and removes all its members
+  *and sets all the images that were part of that group to private,
+  * then finally removes the group from the database
+  */
   if(request.getParameter("fSubmit")!=null){
      String group=request.getParameter("PASTGROUP");
      String sql1 = "select group_id from groups where group_name='"+group+"' and user_name='"+userName+"'";

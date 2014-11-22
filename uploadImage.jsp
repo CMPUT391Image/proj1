@@ -10,9 +10,7 @@
 <H1>Upload Image</H1>
 <%@ page import="java.sql.*,Database.db,java.util.ArrayList" %>
 <%
-
-   //Used this as resource https://www.daniweb.com/web-development/jsp/threads/412354/populating-a-drop-down-box-with-data-in-sql
-   
+  
 
    String error=(String)session.getAttribute("error");
    if (error!=null){
@@ -23,7 +21,10 @@
    String userName=(String)session.getAttribute("USERNAME");
    db newDB= new db();
    Connection conn=newDB.connect();
-    
+  /*
+   *Gets all the groups the user owns and is a part of
+   *and puts in a drop down box for them
+   */  
    ArrayList<String> privacy=new ArrayList<String>();
    privacy.add("public");
    privacy.add("private");  

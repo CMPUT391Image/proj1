@@ -13,7 +13,20 @@
    String userName=(String)session.getAttribute("USERNAME");
    db newDB= new db();
    Connection conn=newDB.connect();
-    
+   
+   /*
+    *If the user is admin sends them directly to Browse Gallery
+    *since the admin has access to all pictures
+    */
+   if (userName.equals("admin")){
+       response.sendRedirect("BrowseGallery");
+   } 
+
+   /*
+    * Retrieves all the group names and their creators 
+    *and puts them in a drop down box for the user to 
+    * select which photos they are able and want to see
+    */
    ArrayList<String> groups=new ArrayList<String>();
    groups.add("public");
    groups.add("private");
@@ -48,6 +61,13 @@
       nameCreator=groupName+","+groupCreator;
       groups.add(nameCreator);
    }
+
+   /*
+    *Gets the group id for the group the user
+    *wants to see its pictures and sends it to 
+    *BrowseGallery.java so that it can get those
+    *specific pictures
+    */
    if (request.getParameter("hSubmit")!=null){
       
       String group1=request.getParameter("GROUPS");
@@ -69,7 +89,7 @@
            while(rset != null && rset.next())
 	   group_int=(rset.getString(1)).trim();
       }
-      //session.setAttribute("PERMITTED",group_int);
+      session.setAttribute("PERMITTED",group_int);
       response.sendRedirect("BrowseGallery");
    }
  
