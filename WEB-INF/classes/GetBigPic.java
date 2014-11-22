@@ -92,25 +92,31 @@ public class GetBigPic extends HttpServlet
 				nameCreator=groupName+","+groupCreator;
 				privacy.add(nameCreator);
 				}
-				//printing form
+				//Creating form, onclick = doPost
 				out.println("</center>"
 						+ "<h4> Edit Image: </h4>"
-						+ "<form action='editImage' method='post'>"
+						+ "<form action='GetBigPic?"+ picid +"' method='post'>"
 						+ "Subject: "
-						+ "<input type='text' name='SUBJECT' maxlength='128' size='30'> <br>"
+						+ "<input type='text' name='new_subject' maxlength='128' size='30'> <br>"
 						+ "Place: "
-						+ "<input type='text' name='PLACE' maxlength='128' size='30'><br>"
+						+ "<input type='text' name='new_place' maxlength='128' size='30'><br>"
 						+ "Description: <Br> "
-						+ "<textarea type='text' name='DESCRIPTION' maxlength='2048' rows='10' cols='25'></textarea> <br>"
+						+ "<textarea type='text' name='new_description' maxlength='2048' rows='10' cols='25'></textarea> <br>"
 						+ "<th>Privacy (Group Name, Creator):</th>"
-						+ " <td><select name='PRIVACY'>"
+						+ " <td><select name='new_privacy'>"
 						+ "<% for (String item:privacy){%>  "
 						+ "<option value='<%=item %>'>" + " <%=item%>"
 						+ " </option>" + " <%}" + " %>" +"</td>" + "</select>"
-						+ "<input type='submit' name='editButton' value='Update' />"
+						+ "<input type='submit' name='editButton' value='update' />"
 						+ "</form>");
-		out.println("GOODBYE</body></html>"); }
+				out.println("GOODBYE</body></html>"); 
+				
+				
+				
+				}
+				
 	} catch( Exception ex ) {
+	
 	    out.println(ex.getMessage() );
 	}
 	// to close the connection
@@ -122,6 +128,53 @@ public class GetBigPic extends HttpServlet
 	    }
 	}
     }
+	//called when update form button is clicked
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+	throws ServletException, IOException {
+		Connection conn = null;
+		Statement stmt = null;
+		PrintWriter out = response.getWriter();
+		HttpSession session = request.getSession();
+		String userName=(String)session.getAttribute("USERNAME");
+		String picid  = request.getQueryString();
+		String subject = request.getParameter("new_subject");
+		String place = request.getParameter("new_place");
+		String description = request.getParameter("new_description");
+		String sql = "Update images set ";
+		if (subject != "" || place != "" || description != ""){
+			if (subject != ""){
+				sql+= "subject = '" + subject+ "'";
+			}
+			if (place != ""){
+				if (subject != ""){
+					sql+=", ";
+				}
+				sql+= "place = '" + place+ "'";
+			}
+			if (description != ""){
+				if (subject != "" || place != ""){
+					sql+=", ";
+				}
+				sql+= "description = '" + description+ "'";
+			}
+			sql += " where photo_id = " + picid;
+			try{
+			conn = getConnected();
+			stmt = conn.createStatement();
+			stmt.executeUpdate(sql);
+			out.println("<hr>Nice<hr>");
+			  }
+			
+			catch(Exception ex){
+				out.println("<hr>" + sql +"<hr>");
+			   out.println("<hr>" + ex.getMessage() + "<hr>");
+			 }
+		}
+		
+		doGet(request,response);
+
+	
+	}
 	
 	    /*
      *   Connect to the specified database
