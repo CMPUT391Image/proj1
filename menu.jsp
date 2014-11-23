@@ -5,7 +5,9 @@
 <H1><CENTER>Main Menu</CENTER></H1>
 <BODY>
 <div style="float: right">
-  <a href="logout.jsp">Logout</a>
+  <form name="logout" method="post" action="logout.jsp">
+  <input type="submit" name="logout" value="logout">
+  </form>
 </div>
 <%
 //takes the user to the edit group page

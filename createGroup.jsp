@@ -5,7 +5,9 @@
 <H1><CENTER>Create Group</CENTER></H1>
 <BODY>
 <div style="float: right">
-   <a href="logout.jsp">Logout</a>
+   <form name="logout" method="post" action="logout.jsp">
+   <input type="submit" name="logout" value="logout">
+   </form>
 </div>
 <%@ page import="java.sql.*,Database.db" %>
 <%

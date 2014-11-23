@@ -4,7 +4,9 @@
 </HEAD>
 <BODY>
 <div style="float: right">
-   <a href="logout.jsp">Logout</a>
+   <form name="logout" method="post" action="logout.jsp">
+   <input type="submit" name="logout" value="logout">
+   </form>
 </div>
 
 <H1>Choose Group</H1>
