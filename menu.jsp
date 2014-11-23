@@ -10,6 +10,8 @@
   </form>
 </div>
 <%
+String userName=(String)session.getAttribute("USERNAME");
+
 //takes the user to the edit group page
 out.println("<form method=post action=editGroup.jsp>");
 out.println("<p>Edit a groups members:</p><input type=submit name=edit value=edit>");
@@ -30,6 +32,12 @@ out.println("</form>");
 out.println("<form method=post action=pictureBrowse.jsp>");
 out.println("<p>Browse pictures:</p><input type=submit name=browse value=browse>");
 out.println("</form>");
+//takes the admin to the data analysis page
+if (userName.equals("admin")){
+   out.println("<form method=post action=Olapview.jsp>");
+   out.println("<p>Analyze Data:</p><input type=submit name=analysis value=analysis>");
+   out.println("</form>");
+}
 %>
 
 

@@ -50,9 +50,45 @@
                groupby=groupby+",subject";
             }
             element++;
-            view=view+"<th><b>Subject</b><th>";
+            view=view+"<th><b>Subject</b></th>";
           }
-         
+          if(time.equals("1")){
+             String interval = request.getParameter("interval");
+             if (interval.equals("week")){
+                if (element==0){
+                    select=select+"trunc(timing,'IW')";
+                    groupby=groupby+"timing"; 
+                }
+                else{
+                   select=select+",trunc(timing,'IW')";
+                   groupby=groupby+",timing";
+                }
+                view=view+"<th><b>week</b></th>";
+             }
+             else if (interval.equals("month")){
+                if (element==0){
+                   select=select+"extract(month from trunc(timing,'MM'))";
+                   groupby=groupby+"timing"; 
+                }
+                else{
+                   select=select+",extract (month from trunc(timing,'MM'))";
+                   groupby=groupby+",timing";
+                }
+                view=view+"<th><b>Month</b></th>";
+             }
+             else{
+                if (element==0){
+                   select=select+"extract(year from trunc(timing,'Y'))";
+                   groupby=groupby+"timing"; 
+                }
+                else{
+                   select=select+",extract (year from trunc(timing,'Y'))";
+                   groupby=groupby+",timing";
+                }
+                view=view+"<th><b>Year</b></th>";
+             }
+             element++;
+          }
           sql=select+", count(photo_id) from images " + groupby+")";
           view=view+"<th><b>Number of Images</b></th>";
        }

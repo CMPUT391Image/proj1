@@ -15,7 +15,7 @@ Analyze Options:
 <input type="checkbox" name="subject" value="1"></input> Subject
 <input type="checkbox" name="time" value="1"></input> Time Period<br>
  Order Time Period by:
- <select name="ACTION">
+ <select name="interval">
     <option value="week">Week</option>
     <option value="month">Month</option>
     <option value="year">Year</option>
