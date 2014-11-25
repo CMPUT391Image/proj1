@@ -137,17 +137,7 @@ public class UploadImage extends HttpServlet {
 		    response_message = "Gif or jpg files only please";
 		}
 	    }
-	    
-
-		/* 
-	        OutputStream realpic = real.getBinaryOutputStream();
-	        ImageIO.write(img, "gif"
-	          int size = myblob.getBufferSize();
-		      byte[] buffer = new byte[size];
-		          int length = -1;
-			      while ((length = instream.read(buffer)) != -1)
-			      outstream.write(buffer, 0, length);
-	    */
+	   
 	    
 	    instream.close();
 	    thumbpic.close();
@@ -168,6 +158,7 @@ public class UploadImage extends HttpServlet {
 	out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 " +
 		        "Transitional//EN\">\n" +
 		        "<HTML>\n" +
+                        "</head><div style='float: right'><form name=logout method=post action=logout.jsp><input type=submit name=logout value=logout></form></div>\n"+
 		        "<HEAD><TITLE>Upload Message</TITLE></HEAD>\n" +
 		        "<BODY>\n" +
 		        "<H1>" +

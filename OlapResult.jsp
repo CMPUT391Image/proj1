@@ -3,7 +3,12 @@
 <TITLE>Results</TITLE>
 </HEAD>
 <BODY>
-
+</head>
+<div style="float: right">
+   <form name="logout" method="post" action="logout.jsp">
+   <input type="submit" name="logout" value="logout">
+   </form>
+</div>
 <H1>Results</H1>
 <%@ page import="java.sql.*,Database.db,java.util.ArrayList" %>
 <%

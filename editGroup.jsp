@@ -13,6 +13,9 @@
 <%@ page import="java.sql.*,Database.db,java.util.ArrayList" %>
 <%
   String userName=(String)session.getAttribute("USERNAME");
+  if (userName==null){
+    response.sendRedirect("login.jsp");
+  }
   db newDB= new db();
   Connection conn=newDB.connect();
     

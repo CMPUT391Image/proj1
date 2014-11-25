@@ -21,9 +21,6 @@
    }
    
    String userName=(String)session.getAttribute("USERNAME");
-   if (userName==null){
-    response.sendRedirect("login.jsp");
-   }
    db newDB= new db();
    Connection conn=newDB.connect();
   /*
