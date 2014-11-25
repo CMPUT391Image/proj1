@@ -72,11 +72,8 @@ public class GetBigPic extends HttpServlet
 	      out.println("<html> Pictures are not avialable</html>");
 		  
 		  //if user is owner, show them the update form
-		if (userName == owner_name){
-			out.println("HELLO </BODY></HTML>");	
-		}
-		else{ 
- 		   ArrayList<String> privacy=new ArrayList<String>();
+		if (userName.equals(owner_name)){
+			ArrayList<String> privacy=new ArrayList<String>();
                    privacy.add("none");
 		   privacy.add("public");
 		   privacy.add("private");  
@@ -118,13 +115,13 @@ public class GetBigPic extends HttpServlet
 						 + " </option>"); 
 				 }
 				out.println( "</select></td>"
-						+ "<input type='submit' name='editButton' value='update' />"
+						+ "<br><input type='submit' name='editButton' value='update' />"
 						+ "</form>");
-				out.println("GOODBYE</body></html>"); 
-				
-				
-				
-				}
+
+		}
+
+		out.println("</body></html>"); 
+
 				
 	} catch( Exception ex ) {
 	

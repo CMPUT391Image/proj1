@@ -104,7 +104,7 @@
            
        Statement stmt = null;
        ResultSet rset = null;
-
+		out.println(sql);
        try{
            stmt = conn.createStatement();
            rset = stmt.executeQuery(sql);
