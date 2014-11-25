@@ -29,6 +29,10 @@ else{
     out.println("<form method=post action=pictureBrowse.jsp>");
     out.println("<p>Browse pictures:</p><input type=submit name=browse value=browse>");
     out.println("</form>");
+    //takes user to search
+    out.println("<form method=post action=search.jsp>");
+    out.println("<p>Search pictures:</p><input type=submit name=search value=search>");
+    out.println("</form>");
     //takes the admin to the data analysis page
     if (userName.equals("admin")){
        out.println("<form method=post action=Olapview.jsp>");

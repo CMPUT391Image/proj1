@@ -62,7 +62,8 @@ public class GetBigPic extends HttpServlet
 			owner_name = rset.getString("owner_name");
 			timing = rset.getString("timing");
 			description = rset.getString("description");
-                out.println("<html><head><title>"+subject+ "</title>+</head>" +
+                out.println("<html><head><div style='float: right'><form name=logout method=post action=logout.jsp><input type=submit name=logout value=logout></form>"+
+"<form name=logout method=post action=menu.jsp><input type=submit name=menu value=menu></form></div><title>"+subject+ "</title>+</head>" +
 	                 "<body bgcolor=\"#000000\" text=\"#cccccc\">" +
 		 "<center><img src = \"/proj1/GetOnePic?"+picid+"\">" +
 			 "<h3>" + subject +"  at " + place + " </h3>" + "<br> taken by: " + owner_name + " on "+timing +

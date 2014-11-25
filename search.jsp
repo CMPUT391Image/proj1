@@ -3,6 +3,14 @@
 <head>
 <title>Search</title>
 </head>
+<div style="float: right">
+    <form name="logout" method="post" action="logout.jsp">
+    <input type="submit" name="logout" value="logout">
+    </form>
+    <form name="logout" method="post" action="menu.jsp">
+    <input type="submit" name="menu" value="menu">
+    </form>
+</div>
 <body>
 	<h1>Search</h1>
 	<form name = "sResult" method="post" action="searchResult.jsp">

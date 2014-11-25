@@ -16,6 +16,8 @@ public class BrowseGallery extends HttpServlet implements SingleThreadModel{
 	out.println("<head>");
 	out.println("<title> Photo List </title>");
 	out.println("</head>");
+        out.println("<div style='float: right'><form name=logout method=post action=logout.jsp><input type=submit name=logout value=logout></form>");
+        out.println("<form name=logout method=post action=menu.jsp><input type=submit name=menu value=menu></form></div>");
 	out.println("<body bgcolor=\"#000000\" text=\"#cccccc\" >");
 	out.println("<center>");
 	out.println("<h3>The List of Images </h3>");

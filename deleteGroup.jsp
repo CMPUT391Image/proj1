@@ -7,6 +7,9 @@
    <form name="logout" method="post" action="logout.jsp">
    <input type="submit" name="logout" value="logout">
    </form>
+   <form name="logout" method="post" action="menu.jsp">
+   <input type="submit" name="menu" value="menu">
+   </form>
 </div>
 <H1>Remove Group</H1>
 <%@ page import="java.sql.*,Database.db,java.util.ArrayList" %>

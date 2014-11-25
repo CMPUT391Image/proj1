@@ -6,7 +6,10 @@
 <div style="float: right">
    <form name="logout" method="post" action="logout.jsp">
    <input type="submit" name="logout" value="logout">
-   </form>    
+   </form>   
+   <form name="logout" method="post" action="menu.jsp">
+   <input type="submit" name="menu" value="menu">
+   </form> 
 </div>
 
 <H1>Edit Group</H1>
