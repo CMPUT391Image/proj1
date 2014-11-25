@@ -1,7 +1,7 @@
 <%@ page import="java.sql.*, java.util.*" %>
 <!DOCTYPE HTML>
 <%
-	//retrieves the text field paramters from searchStart.jsp
+	//retrieves the text field paramters from search.jsp
 	String kWord = request.getParameter("searchKey");
 	String fromTime = request.getParameter("searchFromTime");
 	String toTime = request.getParameter("searchToTime");
@@ -25,8 +25,8 @@
 	String m_url = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
     String m_driverName = "oracle.jdbc.driver.OracleDriver";
 	  
-	String m_userName = "tkevin"; //supply username
-    String m_password = "cactus284"; //supply password
+	String m_userName = "elbohtim"; //supply username
+    String m_password = "foster423"; //supply password
             
     Connection m_con;
 	      
@@ -49,12 +49,13 @@
 	  <%	
 	  //Rank(photo_id) = 6*frequency(subject) + 3*frequency(place) + frequency(description)
 	String userID = (String) session.getAttribute("person_id");
+	out.println("<HTML>");
 	out.println("<h1>search</h1>");
-	out.println(request.getParameter("searchKey"));
+	out.println("<BODY>Searching for: " + request.getParameter("searchKey") + "<BR>");
 	
 	String[] keywords = kWord.split(" ");
 	Statement doSearch = m_con.createStatement();
-	String sql = "Select subject";
+	String sql = "Select photo_id";
 	//if there is no keyword, use dates
 	if (kWord.isEmpty()){
 		sql += " from images where";
@@ -133,19 +134,21 @@
 	//print results
 	//out.println(sortType);
 	//out.println(sql);
+	try{
 	ResultSet rset2 = doSearch.executeQuery(sql);
-	     out.println("<table border=1>");
-              out.println("<tr>");
-              out.println("<th>Item Name</th>");
-              out.println("</tr>");
-              while(rset2.next())
-              {
-                out.println("<tr>");
-                out.println("<td>"); 
-                out.println(rset2.getString(1));
-       
-              } 
-              out.println("</table>");
+	String p_id = "";
+	while (rset2.next()){
+		p_id = (rset2.getObject(1)).toString();
+		// specify the servlet for the image
+		out.println("<a href=\"/proj1/GetBigPic?"+p_id+"\">");
+		// specify the servlet for the themernail
+		out.println("<img src=\"/proj1/GetOnePic?thumb"+p_id +"\"></a>");
+	  }
+	  } catch (Exception e) {
+				out.println(e.getMessage());
+	}
+	out.println("</BODY></HTML>");		  
+			  
 	%>
   </body>
 </html>

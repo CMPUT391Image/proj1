@@ -69,7 +69,7 @@ public class GetBigPic extends HttpServlet
 			 "<br> <br>" + description);
             }
 	    else
-	      out.println("<html> Pictures are not avialable</html>");
+	      out.println("<html> Pictures are not available</html>");
 		  
 		  //if user is owner, show them the update form
 		if (userName.equals(owner_name)){
