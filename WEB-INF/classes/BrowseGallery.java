@@ -24,6 +24,26 @@ public class BrowseGallery extends HttpServlet implements SingleThreadModel {
 		HttpSession session = request.getSession();
 		try {
 
+                if(userName.equals("admin")){
+              	     query = "Select photo_id from images";
+                }
+                else if (group_id.equals("2")){
+		     query = "Select photo_id from images where permitted='2' and owner_name='"+userName+"'";
+		}
+                else if (group_id.equals("all")){
+		    //Sql query that gets all viewable pictures
+		     query = "Select photo_id from images where permitted='2' and owner_name='"+userName+"'";
+		}
+                else if (group_id.equals("top")){
+		    //Sql query that gets the top pictures
+		     query = "Select photo_id from images where permitted='2' and owner_name='"+userName+"'";
+		} 
+		else{
+		     query = "Select photo_id from images where permitted='"+group_id+"'";
+		}
+		session.removeAttribute("PERMITTED");
+
+
 			/*
 			 * Retrives a group id from pictureBrowse.jsp and from that the
 			 * conditional statements get the appropriate picturesfor the user

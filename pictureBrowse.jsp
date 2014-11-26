@@ -7,7 +7,7 @@
    <form name="logout" method="post" action="logout.jsp">
    <input type="submit" name="logout" value="logout">
    </form>
-   <form name="logout" method="post" action="menu.jsp">
+   <form name="menu" method="post" action="menu.jsp">
    <input type="submit" name="menu" value="menu">
    </form>
 </div>
@@ -90,6 +90,12 @@
            }
            else if(group1.equals("private")){
                group_int="2";
+          }
+          else if (group1.equals("all viewable")){
+                group_int="all";
+          }
+          else if (group1.equals("top")){
+                group_int="top";
           }
           else{
               String[] parts=group1.split(",");
