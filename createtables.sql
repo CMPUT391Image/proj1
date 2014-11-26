@@ -68,3 +68,11 @@ CREATE TABLE images (
    FOREIGN KEY(owner_name) REFERENCES users,
    FOREIGN KEY(permitted) REFERENCES groups
 ); 
+
+CREATE TABLE unique_views(
+   photo_id int,
+   visitor_id varchar(24),
+   PRIMARY KEY(photo_id, visitor_id),
+   FOREIGN KEY(photo_id) REFERENCES images,
+   FOREIGN KEY(visitor_id) REFERENCES users
+);
