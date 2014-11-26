@@ -27,7 +27,18 @@ public class GetBigPic extends HttpServlet
      *          select image from yuan.photos where photo_id = PHOTO_ID   
      *    Finally, it sends the picture to the client
      */
-
+public void doPost(HttpServletRequest request,
+                   HttpServletResponse response)
+	throws ServletException, IOException {
+  String userName=(String)session.getAttribute("USERNAME");
+  String picid  = request.getQueryString();
+  String insert = "insert into unique_views values(" + picid + "'"+userName+"')";
+  Connection conn = null;
+  conn = getConnected();
+  	   Statement stmt = conn.createStatement();
+	  int success = stmt.executeUpdate(query);
+}
+	throws ServletException, IOException {
     public void doGet(HttpServletRequest request,
 		      HttpServletResponse response)
 	throws ServletException, IOException {
@@ -37,7 +48,7 @@ public class GetBigPic extends HttpServlet
 	String userName=(String)session.getAttribute("USERNAME");
 	String picid  = request.getQueryString();
 	String query;
-
+        doPost(request,response);
 	query = "select owner_name, timing, description, subject, place from images where photo_id="
 	        + picid;
 
