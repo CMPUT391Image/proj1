@@ -3,8 +3,10 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 
-public class BrowseGallery extends HttpServlet implements SingleThreadModel{
-    public void doGet(HttpServletRequest request,
+public class BrowseGallery extends HttpServlet implements SingleThreadModel
+{
+
+	public void doGet(HttpServletRequest request,
 		      HttpServletResponse res)
 	throws ServletException, IOException {
 
@@ -36,34 +38,60 @@ public class BrowseGallery extends HttpServlet implements SingleThreadModel{
 		    res.sendRedirect("login.jsp");
                     userName="";
 		}
-
+                //if name is admin, select all photos
                 if(userName.equals("admin")){
               	     query = "Select photo_id from images";
+                     //if searching top photos, select all photos that have unique views
+                     if (group_id.equals("top")){
+                       query = "select photo_id from("
+                         +"select distinct(i.photo_id), count(distinct(uv.visitor_id)) as views "
+                         +"from images i, unique_views uv "
+                         +"where i.photo_id = uv.photo_id "
+                         +"group by i.photo_id "
+                         +"order by views desc) "
+                         +"where rownum <=5 ";
+                     }
                 }
+                //select private htos
                 else if (group_id.equals("2")){
 		     query = "Select photo_id from images where permitted='2' and owner_name='"+userName+"'";
 		}
+                
                 else if (group_id.equals("all")){
 		    //Sql query that gets all viewable pictures
 		     query = "select photo_id from images where permitted in( select group_id from groups where user_name='"+userName+"' UNION select group_id from group_lists where friend_id='"+userName+"') UNION select photo_id from images where permitted='2' and owner_name='"+userName+"'";
 		}
-                else if (group_id.equals("top")){
-		    //Sql query that gets the top pictures
-		     query = "Select photo_id from images where permitted='2' and owner_name='"+userName+"'";
-		} 
+                else if (group_id.equals("top"))
+                {
+                  query = " select photo_id from ("
+			+"select distinct(i.photo_id), count(distinct(uv.visitor_id)) as views "
+			+"from images i, unique_views uv, groups g, group_lists gl "
+                        +"where i.photo_id = uv.photo_id and "
+                        +"((i.permitted = g.group_id and g.user_name = '"+userName+"') "
+			+"or (i.permitted = gl.group_id and gl.friend_id = '"+userName+"') "
+			+"or (i.permitted = '1') "
+			+"or (i.permitted = '2' and owner_name = '"+userName+"')) "
+			+"group by i.photo_id "
+			+"order by views desc) "
+			+"where rownum <=5";	
+                }
 		else{
 		     query = "Select photo_id from images where permitted='"+group_id+"'";
 		}
 		session.removeAttribute("PERMITTED");
-		
-
+		query= "select photo_id from images where photo_id = 123123";
+                out.println(query);
                 Connection conn = getConnected();
 		Statement stmt = conn.createStatement();
 		ResultSet rset = stmt.executeQuery(query);
+                if (rset == null){
+                  out.println("Result set empty");
+                }
 		String p_id = "";
 		while (rset.next() ) {
+                  
 		    p_id = (rset.getObject(1)).toString();
-
+    out.println(p_id);
 		    // specify the servlet for the image
 		    out.println("<a href=\"/proj1/GetBigPic?"+p_id+"\">");
 		    // specify the servlet for the themernail
@@ -76,22 +104,24 @@ public class BrowseGallery extends HttpServlet implements SingleThreadModel{
 	out.println("</body>");
 	out.println("</html>");
     }
-    /*
-     *   Connect to the specified database
-     */
-    private Connection getConnected() throws Exception {
 
-	String username = "elbohtim";
-	String password = "foster423";
-        /* one may replace the following for the specified database */
-	String dbstring = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
-    String driverName = "oracle.jdbc.driver.OracleDriver";
 	/*
-	 *  to connect to the database
+	 * Connect to the specified database
 	 */
-	Class drvClass = Class.forName(driverName); 
-	DriverManager.registerDriver((Driver) drvClass.newInstance());
-	return( DriverManager.getConnection(dbstring,username,password) );
-    }
+	private Connection getConnected() throws Exception
+	{
+
+		String username = "elbohtim";
+		String password = "foster423";
+		/* one may replace the following for the specified database */
+		String dbstring = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
+		String driverName = "oracle.jdbc.driver.OracleDriver";
+		/*
+		 * to connect to the database
+		 */
+		Class drvClass = Class.forName(driverName);
+		DriverManager.registerDriver((Driver) drvClass.newInstance());
+		return (DriverManager.getConnection(dbstring, username, password));
+	}
 
 }
