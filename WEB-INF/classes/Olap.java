@@ -7,10 +7,11 @@ import Database.db;
 public class Olap extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+          HttpSession session = request.getSession();
                 String userName=(String)session.getAttribute("USERNAME");
 		PrintWriter out = response.getWriter();
 		if (userName==null){
-		    res.sendRedirect("login.jsp");
+		    response.sendRedirect("login.jsp");
                     userName="";
 		}
                 if (!userName.equals("admin")){

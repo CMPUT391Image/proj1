@@ -14,31 +14,52 @@ import java.util.ArrayList;
  *  The request must come with a query string as follows:
  *    GetOnePic?12:        sends the picture in sm_image with photo_id = 12
  *    GetOnePicture?big12: sends the picture in image  with photo_id = 12
- *
- *  @author  Li-Yan Yuan
+ *Adapted from Dr.Yuan's GetBigPic.java
+ *  @author  Kevin Tang, Tarek El Bohitimy
  *
  */
 public class GetBigPic extends HttpServlet 
     implements SingleThreadModel {
 
     /**
+     *This method inserts into unique_views whenever a unique viewer has viewed the image
+     *
+     *
+
+     */
+
+public void doPost2(HttpServletRequest request,
+                   HttpServletResponse response)
+	throws ServletException, IOException {
+  		HttpSession session = request.getSession();
+  String userName=(String)session.getAttribute("USERNAME");
+  String picid  = request.getQueryString();
+  	PrintWriter out = response.getWriter();
+  String insert = "insert into unique_views values(" + picid + ",'"+userName+"')";
+  
+  Connection conn = null;
+  try{
+  conn = getConnected();
+  	   Statement stmt = conn.createStatement();
+           int success = stmt.executeUpdate(insert);
+  }catch( Exception ex ) {
+    	out.println( ex.getMessage() );
+    out.println("Did not insert");
+	}
+    try{
+      conn.close();
+  }catch( Exception ex ) {
+          out.println("Did not close");
+	}
+
+  
+}
+    /**
      *    This method first gets the query string indicating PHOTO_ID,
      *    and then executes the query 
      *          select image from yuan.photos where photo_id = PHOTO_ID   
      *    Finally, it sends the picture to the client
      */
-public void doPost(HttpServletRequest request,
-                   HttpServletResponse response)
-	throws ServletException, IOException {
-  String userName=(String)session.getAttribute("USERNAME");
-  String picid  = request.getQueryString();
-  String insert = "insert into unique_views values(" + picid + "'"+userName+"')";
-  Connection conn = null;
-  conn = getConnected();
-  	   Statement stmt = conn.createStatement();
-	  int success = stmt.executeUpdate(query);
-}
-	throws ServletException, IOException {
     public void doGet(HttpServletRequest request,
 		      HttpServletResponse response)
 	throws ServletException, IOException {
@@ -48,7 +69,7 @@ public void doPost(HttpServletRequest request,
 	String userName=(String)session.getAttribute("USERNAME");
 	String picid  = request.getQueryString();
 	String query;
-        doPost(request,response);
+        doPost2(request,response);
 	query = "select owner_name, timing, description, subject, place from images where photo_id="
 	        + picid;
 
@@ -83,7 +104,7 @@ public void doPost(HttpServletRequest request,
 	      out.println("<html> Pictures are not available</html>");
 		  
 		  //if user is owner, show them the update/edit form
-		if (userName.equals(owner_name)){
+            if (userName.equals(owner_name) || userName.equals("admin")){
 			ArrayList<String> privacy=new ArrayList<String>();
                    privacy.add("none");
 		   privacy.add("public");
