@@ -32,6 +32,11 @@ public class BrowseGallery extends HttpServlet implements SingleThreadModel{
                 String query="";
                 String userName=(String)session.getAttribute("USERNAME");
                 String group_id=(String)session.getAttribute("PERMITTED");
+		if (userName==null){
+		    res.sendRedirect("login.jsp");
+                    userName="";
+		}
+
                 if(userName.equals("admin")){
               	     query = "Select photo_id from images";
                 }

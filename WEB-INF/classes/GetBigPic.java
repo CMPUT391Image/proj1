@@ -37,6 +37,11 @@ public class GetBigPic extends HttpServlet
 	String userName=(String)session.getAttribute("USERNAME");
 	String picid  = request.getQueryString();
 	String query;
+        
+	if (userName==null){
+	    response.sendRedirect("login.jsp");
+            userName="";
+	}
 
 	query = "select owner_name, timing, description, subject, place from images where photo_id="
 	        + picid;

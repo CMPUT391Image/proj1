@@ -20,8 +20,7 @@
 <TITLE> Search Results</Title>
 </head>
 <div style='float: right'><form name=logout method=post action=logout.jsp><input type=submit name=logout value=logout></form>
-<form name=logout method=post action=menu.jsp><input type=submit name=menu value=menu></form>
-<form name="logout" method="post" action="menu.jsp"><input type="submit" name="menu" value="menu"></form>
+<form name=menu method="post" action="menu.jsp"><input type="submit" name="menu" value="menu"></form>
 </div>
 
 <body>
@@ -52,7 +51,12 @@
 	  %>
 	  <%
           
-         String userName=(String)session.getAttribute("USERNAME");
+        String userName=(String)session.getAttribute("USERNAME");
+        if (userName==null){
+            response.sendRedirect("login.jsp");
+            userName="";
+        }
+        else{
 	  //Rank(photo_id) = 6*frequency(subject) + 3*frequency(place) + frequency(description)
 	String userID = (String) session.getAttribute("person_id");
 	out.println("<HTML>");
@@ -177,9 +181,10 @@
 		// specify the servlet for the themernail
 		out.println("<img src=\"/proj1/GetOnePic?thumb"+p_id +"\"></a>");
 	  }
-	  } catch (Exception e) {
+	  }catch (Exception e) {
 				out.println(e.getMessage());
-	}
+	  }
+        }
 	out.println("</BODY></HTML>");		  
 	m_con.close();		  
 	%>

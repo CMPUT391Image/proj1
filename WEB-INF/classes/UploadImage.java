@@ -29,6 +29,8 @@ public class UploadImage extends HttpServlet {
 	String description=null;
         String privacy=null;
 	
+	
+
 	try {
 	    //Parse the HTTP request to get the image stream
 	    DiskFileUpload fu = new DiskFileUpload();

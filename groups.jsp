@@ -8,6 +8,9 @@
   <form name="logout" method="post" action="logout.jsp">
   <input type="submit" name="logout" value="logout">
   </form>
+  <form name="menu" method="post" action="menu.jsp">
+  <input type="submit" name="menu" value="menu">
+  </form>
 </div>
 <%
    String userName=(String)session.getAttribute("USERNAME");

@@ -14,11 +14,16 @@
 </div>
 <%@ page import="java.sql.*,Database.db" %>
 <%
+    String userName=(String)session.getAttribute("USERNAME");
+    if (userName==null){
+       response.sendRedirect("login.jsp");
+    }
+
     if (request.getParameter("cSubmit")!=null)
     {
 
        int group_id;
-       String userName=(String)session.getAttribute("USERNAME");
+   
 
       //Making sure the user did not leave the group name blank
        String groupName=(request.getParameter("groupName")).trim();

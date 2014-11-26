@@ -12,6 +12,12 @@
     </form>
 </div>
 <body>
+        <%
+         String userName=(String)session.getAttribute("USERNAME");
+         if (userName==null){
+             response.sendRedirect("login.jsp");
+         }
+        %>
 	<h1>Search</h1>
 	<form name = "sResult" method="post" action="searchResult.jsp">
 	By keywords: <input name = "searchKey" type="text" placeholder="Search..."></input> <br>
