@@ -7,7 +7,16 @@ import Database.db;
 public class Olap extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+                String userName=(String)session.getAttribute("USERNAME");
 		PrintWriter out = response.getWriter();
+		if (userName==null){
+		    res.sendRedirect("login.jsp");
+                    userName="";
+		}
+                if (!userName.equals("admin")){
+                  out.println("Insufficient permissions!");
+                }
+
 		// pruint out form for analysis
 		out.println("<html><head><title>" + "Data Analysis" + "</title></head>");
 		out.println("<div style='float: right'>"

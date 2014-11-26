@@ -6,6 +6,7 @@ import java.sql.*;
 public class BrowseGallery extends HttpServlet implements SingleThreadModel
 {
 
+
 	public void doGet(HttpServletRequest request,
 		      HttpServletResponse res)
 	throws ServletException, IOException {
@@ -79,19 +80,14 @@ public class BrowseGallery extends HttpServlet implements SingleThreadModel
 		     query = "Select photo_id from images where permitted='"+group_id+"'";
 		}
 		session.removeAttribute("PERMITTED");
-		query= "select photo_id from images where photo_id = 123123";
-                out.println(query);
                 Connection conn = getConnected();
 		Statement stmt = conn.createStatement();
 		ResultSet rset = stmt.executeQuery(query);
-                if (rset == null){
-                  out.println("Result set empty");
-                }
+        
 		String p_id = "";
 		while (rset.next() ) {
                   
 		    p_id = (rset.getObject(1)).toString();
-    out.println(p_id);
 		    // specify the servlet for the image
 		    out.println("<a href=\"/proj1/GetBigPic?"+p_id+"\">");
 		    // specify the servlet for the themernail
