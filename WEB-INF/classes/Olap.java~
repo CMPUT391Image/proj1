@@ -7,24 +7,12 @@ import Database.db;
 public class Olap extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-          HttpSession session = request.getSession();
-                String userName=(String)session.getAttribute("USERNAME");
 		PrintWriter out = response.getWriter();
-		if (userName==null){
-		    response.sendRedirect("login.jsp");
-                    userName="";
-		}
-                if (!userName.equals("admin")){
-                  out.println("Insufficient permissions!");
-                }
-
 		// pruint out form for analysis
 		out.println("<html><head><title>" + "Data Analysis" + "</title></head>");
 		out.println("<div style='float: right'>"
 				+ "<form name='logout' method='post' action='logout.jsp'>"
 				+ "<input type='submit' name='logout' value='logout'> </form>"
-                                +"<form name=help method=get action=menu.jsp><input type=submit name=menu value=menu></form>"
-                                +"<form name=help method=get action=help.html><input type=submit name=help value=help></form>"
 				+ "</div>");
 		out.println("<body> <H1>Data Analysis</H1>"
 				+ "<form name='olapresult' method='post' action = 'Olap'>"

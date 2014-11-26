@@ -10,6 +10,9 @@
    <form name="menu" method="post" action="menu.jsp">
    <input type="submit" name="menu" value="menu">
    </form>
+   <form name=help method=get action=help.html>
+   <input type=submit name=help value=help>
+   </form>
 </div>
 
 <H1>Choose Group</H1>

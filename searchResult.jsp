@@ -13,6 +13,12 @@
        response.sendRedirect("search.jsp");
        return;
    }
+   if (kWord == "" && sortType.equals("none")) {
+       String error = "<p><b><font color=ff0000>You need to enter keywords if you are not sorting by time!</font></b></p>";
+       session.setAttribute("error", error);
+       response.sendRedirect("search.jsp");
+       return;
+   }
 %>
 <HTML>
 <HEAD>
@@ -20,6 +26,7 @@
 </head>
 <div style='float: right'><form name=logout method=post action=logout.jsp><input type=submit name=logout value=logout></form>
 <form name=menu method=post action=menu.jsp><input type=submit name=menu value=menu></form>
+<form name=help method=get action=help.html><input type=submit name=help value=help></form>
 </div>
 <body>
 <%
@@ -153,6 +160,7 @@
 
   sql=sql+" UNION "+sql2;
 
+  
   try{
      ResultSet rset2 = doSearch.executeQuery(sql);
      String p_id = "";
