@@ -42,4 +42,13 @@
         <url-pattern>/GetBigPic</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>Olap</servlet-name>
+        <servlet-class>Olap</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Olap</servlet-name>
+        <url-pattern>/Olap</url-pattern>
+    </servlet-mapping>
+
 </web-app>

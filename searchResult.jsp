@@ -1,4 +1,4 @@
-<%@ page import="java.sql.*, java.util.*,Database.db" %>
+<%@ page import="java.sql.*, java.util.*" %>
 <!DOCTYPE HTML>
 <%
 	//retrieves the text field paramters from search.jsp
@@ -19,9 +19,6 @@
 <HEAD>
 <TITLE> Search Results</Title>
 </head>
-<div style='float: right'><form name=logout method=post action=logout.jsp><input type=submit name=logout value=logout></form>
-<form name=menu method="post" action="menu.jsp"><input type="submit" name="menu" value="menu"></form>
-</div>
 
 <body>
 		<%
@@ -32,7 +29,7 @@
     String m_password = "foster423"; //supply password
             
     Connection m_con;
-	      
+	      //connecting
       try
       {
       
@@ -49,15 +46,9 @@
         return;
       }
 	  %>
-	  <%
-          
-        String userName=(String)session.getAttribute("USERNAME");
-        if (userName==null){
-            response.sendRedirect("login.jsp");
-            userName="";
-        }
-        else{
+	  <%	
 	  //Rank(photo_id) = 6*frequency(subject) + 3*frequency(place) + frequency(description)
+	  //creatnig sql statement
 	String userID = (String) session.getAttribute("person_id");
 	out.println("<HTML>");
 	out.println("<h1>search</h1>");
@@ -65,8 +56,7 @@
 	
 	String[] keywords = kWord.split(" ");
 	Statement doSearch = m_con.createStatement();
-	String sql = "Select photo_id,timing";
-        String sql2="Select photo_id,timing";
+	String sql = "Select photo_id";
 	//if there is no keyword, use dates
 	if (kWord.isEmpty()){
 		sql += " from images where";
@@ -74,103 +64,78 @@
 		if (!fromTime.isEmpty() && !toTime.isEmpty()) {
 			sql += " (timing between to_date('" + fromTime
 					+ "', 'DD/MM/YYYY') " + "AND to_date('" + toTime + "','DD/MM/YYYY')) ";
-                        sql2 += " (timing between to_date('" + fromTime
-					+ "', 'DD/MM/YYYY') " + "AND to_date('" + toTime + "','DD/MM/YYYY')) ";
 		}
 		//else only begining of time
 			else if(!fromTime.isEmpty()){
 				sql += " (timing >= to_date('" + fromTime
-						+ "','DD/MM/YYYY')) ";
-                                sql2 += " (timing >= to_date('" + fromTime
 						+ "','DD/MM/YYYY')) ";
 			}
 			//else only end of time
 			else if(!toTime.isEmpty()){
 				sql += " (timing <= to_date('" + toTime
 						+ "','DD/MM/YYYY')) ";
-                                sql2 += " (timing <= to_date('" + toTime
-						+ "','DD/MM/YYYY')) ";
 			}
 	}
 	//if there are keywords, take score of keywords
 	if(!kWord.isEmpty()){
 		sql+=", ";
-                sql2+=", ";
 		int mod = 0;
 		for (int i = 1; i <= keywords.length; ++i)
 		{
 			sql += "6*score(" + Integer.toString(mod+1) + ") +" 
-			+ "6*score(" + Integer.toString(mod+2) + ") +"
-			+ "score(" + Integer.toString(mod+3) + ") ";
-                        sql2 += "6*score(" + Integer.toString(mod+1) + ") +" 
-			+ "6*score(" + Integer.toString(mod+2) + ") +"
+			+ "3*score(" + Integer.toString(mod+2) + ") +"
 			+ "score(" + Integer.toString(mod+3) + ") ";
 			if (i != keywords.length){
 			sql += "+";
-                        sql2 += "+";
 			mod +=3;
 			}
 		}
-		sql += "as rank from images where permitted in(select group_id from groups where user_name = '"+userName+"' UNION select group_id from group_lists where friend_id ='"+userName+"' UNION select group_id from groups where group_id='1') and(";
-                sql2+=" as rank from images where permitted='2' and owner_name='"+userName+"'and (";
+		sql += "as rank from images where (";
 
 		mod = 0;
 		for (int j = 0; j < keywords.length; ++j) {
 		sql += "contains(SUBJECT, '" + keywords[j] +"', "+ Integer.toString(mod + 1) + ") >0 OR " 
 		+ "contains(PLACE, '" + keywords[j] +"', "+ Integer.toString(mod + 2) + ") >0 OR "
 		+ "contains(DESCRIPTION, '" + keywords[j] +"', "+ Integer.toString(mod + 3) + ") >0 ";
-
-                sql2+="contains(SUBJECT, '" + keywords[j] +"', "+ Integer.toString(mod + 1) + ") >0 OR " 
-		+ "contains(PLACE, '" + keywords[j] +"', "+ Integer.toString(mod + 2) + ") >0 OR "
-		+ "contains(DESCRIPTION, '" + keywords[j] +"', "+ Integer.toString(mod + 3) + ") >0 ";
 		if (j != keywords.length-1) {
 			sql += "OR ";
-                        sql2 += "OR ";
 			mod += 3;
 			}
 		}
 		sql+=")";
-                sql2+=")";
 			//if range of times given
 	if (!fromTime.isEmpty() && !toTime.isEmpty()) {
 		sql += "AND (timing between to_date('" + fromTime
-				+ "', 'DD/MM/YYYY') " + "AND to_date('" + toTime + "','DD/MM/YYYY')) ";
-                sql2 += "AND (timing between to_date('" + fromTime
 				+ "', 'DD/MM/YYYY') " + "AND to_date('" + toTime + "','DD/MM/YYYY')) ";
 	}
 	//else only begining of time
 		else if(!fromTime.isEmpty()){
 			sql += "AND (timing >= to_date('" + fromTime
 					+ "','DD/MM/YYYY')) ";
-                        sql2 += "AND (timing >= to_date('" + fromTime
-					+ "','DD/MM/YYYY')) ";
 		}
 		//else only end of time
 		else if(!toTime.isEmpty()){
-                        sql += "AND (timing <= to_date('" + toTime
-					+ "','DD/MM/YYYY')) ";
-			sql2 += "AND (timing <= to_date('" + toTime
+			sql += "AND (timing <= to_date('" + toTime
 					+ "','DD/MM/YYYY')) ";
 		}
 	}
+	//Depending on ordering info - asc, desc, or by rank
 	if (sortType.equals("none")){
-		sql2+="ORDER BY RANK desc";
+		sql+="ORDER BY RANK desc";
 		//out.println("one");
 		
 	}
 	else if (sortType.equals("desc")){
-		sql2+="ORDER BY timing desc";
+		sql+="ORDER BY timing desc";
 		//out.println("two");
 	}
 	else if	(sortType.equals("ascen")){
-		sql2+="ORDER BY timing asc";
+		sql+="ORDER BY timing asc";
 		//out.println("three");
 	}
 	//print results
 	//out.println(sortType);
-        
-        sql=sql+" UNION "+sql2;
-	
+	//out.println(sql);
 	try{
 	ResultSet rset2 = doSearch.executeQuery(sql);
 	String p_id = "";
@@ -181,13 +146,13 @@
 		// specify the servlet for the themernail
 		out.println("<img src=\"/proj1/GetOnePic?thumb"+p_id +"\"></a>");
 	  }
-	  }catch (Exception e) {
+	  } catch (Exception e) {
 				out.println(e.getMessage());
-	  }
-        }
+	}
+	out.println(sql);
 	out.println("</BODY></HTML>");		  
-	m_con.close();		  
+			  
 	%>
   </body>
 </html>
-
+	

@@ -38,6 +38,8 @@
        * select which photos they are able and want to see
       */
       ArrayList<String> groups=new ArrayList<String>();
+      groups.add("all viewable");
+      groups.add("top");
       groups.add("public");
       groups.add("private");
 
@@ -61,6 +63,7 @@
          groupCreator=(rset.getString(2)).trim();
          nameCreator=groupName+","+groupCreator;          
          groups.add(nameCreator);
+         
        }
        String sql1 = "select group_name, user_name from groups where user_name ='"+userName+"'";
    
