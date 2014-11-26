@@ -38,6 +38,8 @@
        * select which photos they are able and want to see
       */
       ArrayList<String> groups=new ArrayList<String>();
+      groups.add("all viewable");
+      groups.add("top");
       groups.add("public");
       groups.add("private");
 
@@ -56,8 +58,6 @@
       String nameCreator="";
       String groupName = "";
       String groupCreator="";
-      groups.add("all viewable");
-      groups.add("top");
       while(rset != null && rset.next()){
          groupName = (rset.getString(1)).trim();
          groupCreator=(rset.getString(2)).trim();
