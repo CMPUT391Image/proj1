@@ -56,11 +56,14 @@
       String nameCreator="";
       String groupName = "";
       String groupCreator="";
+      groups.add("all viewable");
+      groups.add("top");
       while(rset != null && rset.next()){
          groupName = (rset.getString(1)).trim();
          groupCreator=(rset.getString(2)).trim();
          nameCreator=groupName+","+groupCreator;          
          groups.add(nameCreator);
+         
        }
        String sql1 = "select group_name, user_name from groups where user_name ='"+userName+"'";
    
