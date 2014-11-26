@@ -43,8 +43,8 @@ public void doPost2(HttpServletRequest request,
   	   Statement stmt = conn.createStatement();
            int success = stmt.executeUpdate(insert);
   }catch( Exception ex ) {
-    //out.println( ex.getMessage() );
-    //out.println("Did not insert");
+    	out.println( ex.getMessage() );
+    out.println("Did not insert");
 	}
     try{
       conn.close();
@@ -241,11 +241,7 @@ public void doPost2(HttpServletRequest request,
 			    }
 			}
 			sql += " where photo_id = " + picid;
-<<<<<<< HEAD
-                       
-=======
                         out.println(sql);
->>>>>>> 8b11efcb2693b523ca93c2e29a767021cae81b77
                         try{
                             stmt.executeUpdate(sql);
                         }

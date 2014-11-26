@@ -1,4 +1,4 @@
-ndefine idxname = "mySubjectIndex"
+define idxname = "mySubjectIndex"
 define interval = "1"
 
 set serveroutput on
