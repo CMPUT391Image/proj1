@@ -29,7 +29,7 @@
     String m_password = "foster423"; //supply password
             
     Connection m_con;
-	      
+	      //connecting
       try
       {
       
@@ -48,6 +48,7 @@
 	  %>
 	  <%	
 	  //Rank(photo_id) = 6*frequency(subject) + 3*frequency(place) + frequency(description)
+	  //creatnig sql statement
 	String userID = (String) session.getAttribute("person_id");
 	out.println("<HTML>");
 	out.println("<h1>search</h1>");
@@ -118,6 +119,7 @@
 					+ "','DD/MM/YYYY')) ";
 		}
 	}
+	//Depending on ordering info - asc, desc, or by rank
 	if (sortType.equals("none")){
 		sql+="ORDER BY RANK desc";
 		//out.println("one");
@@ -133,7 +135,7 @@
 	}
 	//print results
 	//out.println(sortType);
-	out.println(sql);
+	//out.println(sql);
 	try{
 	ResultSet rset2 = doSearch.executeQuery(sql);
 	String p_id = "";

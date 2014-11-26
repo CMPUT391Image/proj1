@@ -37,11 +37,6 @@ public class GetBigPic extends HttpServlet
 	String userName=(String)session.getAttribute("USERNAME");
 	String picid  = request.getQueryString();
 	String query;
-        
-	if (userName==null){
-	    response.sendRedirect("login.jsp");
-            userName="";
-	}
 
 	query = "select owner_name, timing, description, subject, place from images where photo_id="
 	        + picid;
@@ -67,8 +62,7 @@ public class GetBigPic extends HttpServlet
 			owner_name = rset.getString("owner_name");
 			timing = rset.getString("timing");
 			description = rset.getString("description");
-                out.println("<html><head><div style='float: right'><form name=logout method=post action=logout.jsp><input type=submit name=logout value=logout></form>"+
-"<form name=logout method=post action=menu.jsp><input type=submit name=menu value=menu></form></div><title>"+subject+ "</title>+</head>" +
+                out.println("<html><head><title>"+subject+ "</title>+</head>" +
 	                 "<body bgcolor=\"#000000\" text=\"#cccccc\">" +
 		 "<center><img src = \"/proj1/GetOnePic?"+picid+"\">" +
 			 "<h3>" + subject +"  at " + place + " </h3>" + "<br> taken by: " + owner_name + " on "+timing +
@@ -77,7 +71,7 @@ public class GetBigPic extends HttpServlet
 	    else
 	      out.println("<html> Pictures are not available</html>");
 		  
-		  //if user is owner, show them the update form
+		  //if user is owner, show them the update/edit form
 		if (userName.equals(owner_name)){
 			ArrayList<String> privacy=new ArrayList<String>();
                    privacy.add("none");
@@ -142,7 +136,7 @@ public class GetBigPic extends HttpServlet
 	    }
 	}
     }
-	//called when update form button is clicked
+	//called when update form button is clicked - this will udpate the image with the userinputted information
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		Connection conn = null;
@@ -167,6 +161,7 @@ public class GetBigPic extends HttpServlet
 		    out.println("<hr>" + sql +"<hr>");
 		    out.println("<hr>" + ex.getMessage() + "<hr>");
 		}
+		//creating sql statement for updating
 		if (subject != "" || place != "" || description != "" || !privacy.equals("none")){//TAREK CHANGE
 			if (subject != ""){
 				sql+= "subject = '" + subject+ "'";
@@ -215,21 +210,14 @@ public class GetBigPic extends HttpServlet
                         catch(Exception e){
 			     out.println("<hr>" + e.getMessage() + "<hr>");
 			}
-			/*try{
-			conn = getConnected();
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sql);
-			out.println("<hr>Nice<hr>");
-			  }
-			
-			catch(Exception ex){
-				out.println("<hr>" + sql +"<hr>");
-			   out.println("<hr>" + ex.getMessage() + "<hr>");
-			   }*?*/
 		}
 		
 		doGet(request,response);
-
+			try{
+             conn.close();  
+			 }       catch(Exception ex){
+              out.println("<hr>" + ex.getMessage() + "<hr>");
+        }
 	
 	}
 	
