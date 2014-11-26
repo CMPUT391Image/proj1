@@ -35,7 +35,7 @@ else{
     out.println("</form>");
     //takes the admin to the data analysis page
     if (userName.equals("admin")){
-       out.println("<form method=post action=Olap>");
+       out.println("<form method=get action=Olap>");
        out.println("<p>Analyze Data:</p><input type=submit name=analysis value=analysis>");
        out.println("</form>");
     }

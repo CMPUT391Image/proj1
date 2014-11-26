@@ -23,14 +23,7 @@
    
     db newDB= new db();
     Connection conn=newDB.connect();
-   
-    /*
-     *If the user is admin sends them directly to Browse Gallery
-     *since the admin has access to all pictures
-     */
-     if (userName.equals("admin")){
-         response.sendRedirect("BrowseGallery");
-     } 
+
 
      /*
       * Retrieves all the group names and their creators 
