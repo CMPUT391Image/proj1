@@ -212,11 +212,16 @@ public void doPost2(HttpServletRequest request,
 			}
                         if (!privacy.equals("none")){
                             String privacy_int="";
+                            if (subject != "" || place != "" || description != ""){
+                                 sql+=", ";
+                            }
 			    if(privacy.equals("public")){
 				privacy_int="1";
+                                sql+="permitted = '" + privacy_int+"'";
 			    }
 			    else if(privacy.equals("private")){
 				privacy_int="2";
+                                sql+="permitted = '" + privacy_int+"'";
 			    }
  
 			    else{
@@ -236,6 +241,7 @@ public void doPost2(HttpServletRequest request,
 			    }
 			}
 			sql += " where photo_id = " + picid;
+                       
                         try{
                             stmt.executeUpdate(sql);
                         }

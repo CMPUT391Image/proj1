@@ -73,20 +73,12 @@
 
          //Removing user from a group and displaying the proper error messages
          try{
-             String sql2 = "select friend_id from group_lists where group_id='"+group_id+"'and friend_id='"+member+"'";
-             rset = stmt.executeQuery(sql2);
-
-             String check="";
-             while(rset != null && rset.next())
-             check = (rset.getString(1)).trim();
-             if (check.equals("")){
-                 out.println("<p><b>Member is not in the group</b></p>");
-             }
-             else{
-               stmt.execute("update images set permitted='2' where permitted='"+group_id+"' and user_name='"+member+"'");   
-               stmt.execute("delete from group_lists where group_id='"+group_id+"'and friend_id='"+member+"'");
-               response.sendRedirect("menu.jsp");
-             }
+ 
+             stmt.execute("update images set permitted='2' where permitted='"+group_id+"' and owner_name='"+member+"'");   
+            
+             stmt.execute("delete from group_lists where group_id='"+group_id+"'and friend_id='"+member+"'");
+             response.sendRedirect("menu.jsp");
+  
          }
          catch(Exception ex){
              out.println("<p><b>Member is already not in the group</b></p>");
