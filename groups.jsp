@@ -1,8 +1,8 @@
 <HTML>
 <HEAD>
-<TITLE>Main Menu</TITLE>
+<TITLE>Groups</TITLE>
 </HEAD>
-<H1><CENTER>Main Menu</CENTER></H1>
+<H1><CENTER>Groups</CENTER></H1>
 <BODY>
 <div style="float: right">
   <form name="logout" method="post" action="logout.jsp">
