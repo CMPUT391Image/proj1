@@ -109,12 +109,12 @@
     sql2+=" as rank from images where permitted='2' and owner_name='"+userName+"'and (";
     mod = 0;
     for (int j = 0; j < keywords.length; ++j) {
-       sql += "contains(SUBJECT, '" + keywords[j] +"', "+ Integer.toString(mod + 1) + ") >0 OR "
-       + "contains(PLACE, '" + keywords[j] +"', "+ Integer.toString(mod + 2) + ") >0 OR "
-       + "contains(DESCRIPTION, '" + keywords[j] +"', "+ Integer.toString(mod + 3) + ") >0 ";
-       sql2+="contains(SUBJECT, '" + keywords[j] +"', "+ Integer.toString(mod + 1) + ") >0 OR "
-       + "contains(PLACE, '" + keywords[j] +"', "+ Integer.toString(mod + 2) + ") >0 OR "
-       + "contains(DESCRIPTION, '" + keywords[j] +"', "+ Integer.toString(mod + 3) + ") >0 ";
+       sql += "contains(SUBJECT, '%" + keywords[j] +"%', "+ Integer.toString(mod + 1) + ") >0 OR "
+       + "contains(PLACE, '%" + keywords[j] +"%', "+ Integer.toString(mod + 2) + ") >0 OR "
+       + "contains(DESCRIPTION, '%" + keywords[j] +"%', "+ Integer.toString(mod + 3) + ") >0 ";
+       sql2+="contains(SUBJECT, '%" + keywords[j] +"%', "+ Integer.toString(mod + 1) + ") >0 OR "
+       + "contains(PLACE, '%" + keywords[j] +"%', "+ Integer.toString(mod + 2) + ") >0 OR "
+       + "contains(DESCRIPTION, '%" + keywords[j] +"%', "+ Integer.toString(mod + 3) + ") >0 ";
        if (j != keywords.length-1) {
           sql += "OR ";
           sql2 += "OR ";
