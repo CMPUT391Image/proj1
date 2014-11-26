@@ -94,10 +94,10 @@
       for (int i = 1; i <= keywords.length; ++i)
       {
          sql += "6*score(" + Integer.toString(mod+1) + ") +"
-         + "6*score(" + Integer.toString(mod+2) + ") +"
+         + "3*score(" + Integer.toString(mod+2) + ") +"
          + "score(" + Integer.toString(mod+3) + ") ";
          sql2 += "6*score(" + Integer.toString(mod+1) + ") +"
-         + "6*score(" + Integer.toString(mod+2) + ") +"
+         + "3*score(" + Integer.toString(mod+2) + ") +"
          + "score(" + Integer.toString(mod+3) + ") ";
          if (i != keywords.length){
             sql += "+";
@@ -160,7 +160,6 @@
 
   sql=sql+" UNION "+sql2;
 
-  
   try{
      ResultSet rset2 = doSearch.executeQuery(sql);
      String p_id = "";

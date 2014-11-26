@@ -4,6 +4,10 @@
  *              Fall, 2014
  *  Author:     Prof. Li-Yan Yuan
  */
+DROP INDEX myPlaceIndex;
+DROP INDEX mySubjectIndex;
+DROP INDEX myDesIndex;
+DROP TABLE unique_views;
 DROP TABLE images;
 DROP TABLE group_lists;
 DROP TABLE groups;
