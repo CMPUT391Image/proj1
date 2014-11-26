@@ -91,6 +91,12 @@
            else if(group1.equals("private")){
                group_int="2";
           }
+          else if (group1.equals("all viewable")){
+                group_int="all";
+          }
+          else if (group1.equals("top")){
+                group_int="top";
+          }
           else{
               String[] parts=group1.split(",");
               String name=parts[0];

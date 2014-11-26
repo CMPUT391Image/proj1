@@ -43,6 +43,14 @@ public class BrowseGallery extends HttpServlet implements SingleThreadModel{
                 else if (group_id.equals("2")){
 		     query = "Select photo_id from images where permitted='2' and owner_name='"+userName+"'";
 		}
+                else if (group_id.equals("all")){
+		    //Sql query that gets all viewable pictures
+		     query = "Select photo_id from images where permitted='2' and owner_name='"+userName+"'";
+		}
+                else if (group_id.equals("top")){
+		    //Sql query that gets the top pictures
+		     query = "Select photo_id from images where permitted='2' and owner_name='"+userName+"'";
+		} 
 		else{
 		     query = "Select photo_id from images where permitted='"+group_id+"'";
 		}
