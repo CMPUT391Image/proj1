@@ -95,6 +95,7 @@ public void doPost2(HttpServletRequest request,
 			timing = rset.getString("timing");
 			description = rset.getString("description");
                 out.println("<html><head><title>"+subject+ "</title>+</head>" +
+                         "<form name=logout method=post action=logout.jsp><input type=submit name=logout value=logout></form><form name=logout method=post action=menu.jsp><input type=submit name=menu value=menu></form> <form name=help method=get action=help.html><input type=submit name=help value=help></form>"+
 	                 "<body bgcolor=\"#000000\" text=\"#cccccc\">" +
 		 "<center><img src = \"/proj1/GetOnePic?"+picid+"\">" +
 			 "<h3>" + subject +"  at " + place + " </h3>" + "<br> taken by: " + owner_name + " on "+timing +
@@ -241,17 +242,14 @@ public void doPost2(HttpServletRequest request,
 			    }
 			}
 			sql += " where photo_id = " + picid;
-<<<<<<< HEAD
-                       
-=======
-                        out.println(sql);
->>>>>>> 8b11efcb2693b523ca93c2e29a767021cae81b77
+
                         try{
                             stmt.executeUpdate(sql);
                         }
                         catch(Exception e){
 			     out.println("<hr>" + e.getMessage() + "<hr>");
 			}
+                        out.println(sql);
 		}
 		
 		doGet(request,response);

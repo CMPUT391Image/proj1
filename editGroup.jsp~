@@ -73,11 +73,9 @@
 
          //Removing user from a group and displaying the proper error messages
          try{
-             try{
-                stmt.execute("update images set permitted='2' where permitted='"+group_id+"' and user_name='"+member+"'");   
-             }catch(Exception e){
-                String a="1";//Do nothing
-             }
+ 
+             stmt.execute("update images set permitted='2' where permitted='"+group_id+"' and owner_name='"+member+"'");   
+            
              stmt.execute("delete from group_lists where group_id='"+group_id+"'and friend_id='"+member+"'");
              response.sendRedirect("menu.jsp");
   
