@@ -3,6 +3,7 @@
 <TITLE>REGISTER</TITLE>
 </HEAD>
 <H1><CENTER>Register</CENTER></H1>
+<div style='float: right'><form name=help method=get action=help.html><input type=submit name=help value=help></form></div>
 <BODY>
 <%@ page import="java.sql.*,Database.db" %>
 

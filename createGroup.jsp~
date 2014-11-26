@@ -13,7 +13,7 @@
    </form>
    <form name=help method=get action=help.html>
    <input type=submit name=help value=help>
-   </form>
+   ge</form>
 </div>
 <%@ page import="java.sql.*,Database.db" %>
 <%
